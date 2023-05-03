@@ -5,6 +5,7 @@ import { toast } from 'react-hot-toast'
 import { signIn } from 'next-auth/react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import { FcGoogle } from 'react-icons/fc'
+import { RiKakaoTalkFill } from 'react-icons/ri'
 import { AiFillGithub } from 'react-icons/ai'
 import { useRouter } from 'next/navigation'
 
@@ -93,10 +94,17 @@ const LoginModal = () => {
       />
       <Button
         outline
+        label="KaKao로 시작하기"
+        icon={RiKakaoTalkFill}
+        onClick={() => signIn('kakao')}
+      />
+      <Button
+        outline
         label="Github으로 시작하기"
         icon={AiFillGithub}
         onClick={() => signIn('github')}
       />
+
       <div
         className="
       text-neutral-500 text-center mt-4 font-light"
