@@ -1,9 +1,12 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from './page.module.css'
+import ClientOnly from './components/ClientOnly'
+import Container from './components/Container'
 
-const inter = Inter({ subsets: ['latin'] })
-
-export default function Home() {
-  return <div className="text-rose-500 text-2xl">Hello Airbnb!</div>
+const Home = async () => {
+  return (
+    <ClientOnly>
+      <Container>hello</Container>
+    </ClientOnly>
+  )
 }
+
+export default Home
