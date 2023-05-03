@@ -1,26 +1,23 @@
 'use client'
 
 import { useCallback, useState } from 'react'
-
-// import { signIn } from 'next-auth/react';
+import { toast } from 'react-hot-toast'
+import { signIn } from 'next-auth/react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import { FcGoogle } from 'react-icons/fc'
 import { AiFillGithub } from 'react-icons/ai'
+import { useRouter } from 'next/navigation'
 
 import useRegisterModal from '@/app/hooks/useRegisterModal'
 import useLoginModal from '@/app/hooks/useLoginModal'
-// import useCurrentUser from "@/app/hooks/useCurrentUser";
 
-import Input from '../inputs/Input'
 import Modal from '../Modal'
+import Input from '../inputs/Input'
 import Heading from '../Heading'
 import Button from '../Button'
 
 const LoginModal = () => {
-  // const { mutate: mutateCurrentUser } = useCurrentUser();
-
-  const currentUser: any = null
-
+  const router = useRouter()
   const loginModal = useLoginModal()
   const registerModal = useRegisterModal()
   const [isLoading, setIsLoading] = useState(false)
@@ -39,23 +36,22 @@ const LoginModal = () => {
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true)
 
-    // signIn('credentials', {
-    //   ...data,
-    //   redirect: false
-    // })
-    // .then((callback) => {
-    //   setIsLoading(false);
+    signIn('credentials', {
+      ...data,
+      redirect: false,
+    }).then((callback) => {
+      setIsLoading(false)
 
-    //   if (callback?.ok) {
-    //     toast.success('Logged in');
-    //     mutateCurrentUser();
-    //     loginModal.onClose();
-    //   }
+      if (callback?.ok) {
+        toast.success('Logged in')
+        router.refresh()
+        loginModal.onClose()
+      }
 
-    //   if (callback?.error) {
-    //     toast.error(callback.error);
-    //   }
-    // });
+      if (callback?.error) {
+        toast.error(callback.error)
+      }
+    })
   }
 
   const onToggle = useCallback(() => {
@@ -65,7 +61,7 @@ const LoginModal = () => {
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
-      <Heading title="Welcome back" subtitle="Login to your account!" />
+      <Heading title="Welcome !" subtitle="귀하의 계정에 로그인하십시오 !" />
       <Input
         id="email"
         label="Email"
@@ -91,19 +87,22 @@ const LoginModal = () => {
       <hr />
       <Button
         outline
-        label="Continue with Google"
+        label="Google로 시작하기"
         icon={FcGoogle}
-        onClick={() => console.log('google')}
+        onClick={() => signIn('google')}
       />
       <Button
         outline
-        label="Continue with Github"
+        label="Github으로 시작하기"
         icon={AiFillGithub}
-        onClick={() => console.log('github')}
+        onClick={() => signIn('github')}
       />
-      <div className="text-neutral-500 text-center mt-4 font-light">
+      <div
+        className="
+      text-neutral-500 text-center mt-4 font-light"
+      >
         <p>
-          First time using Airbnb?
+          아직 회원이 아니신가요 ?
           <span
             onClick={onToggle}
             className="
@@ -113,7 +112,7 @@ const LoginModal = () => {
             "
           >
             {' '}
-            Create an account
+            회원가입하러 가기
           </span>
         </p>
       </div>
@@ -125,7 +124,7 @@ const LoginModal = () => {
       disabled={isLoading}
       isOpen={loginModal.isOpen}
       title="Login"
-      actionLabel="Continue"
+      actionLabel="로그인"
       onClose={loginModal.onClose}
       onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}

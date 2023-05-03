@@ -7,7 +7,8 @@ import { AiOutlineMenu } from 'react-icons/ai'
 import { useRouter } from 'next/navigation'
 import Avatar from '../Avatar'
 import MenuItem from './MenuItem'
-import useRentModal from '@/app/hooks/useRentModal'
+import Search from './Search'
+import Cart from './Cart'
 
 const UserMenu = () => {
   const router = useRouter()
@@ -16,7 +17,6 @@ const UserMenu = () => {
   const currentUser = null
   const loginModal = useLoginModal()
   const registerModal = useRegisterModal()
-  const rentModal = useRentModal()
   const [isOpen, setIsOpen] = useState(false)
 
   const toggleOpen = useCallback(() => {
@@ -26,6 +26,8 @@ const UserMenu = () => {
   return (
     <div className="relative">
       <div className="flex flex-row items-center gap-3">
+        <Search />
+
         <div
           className="
             hidden
@@ -65,6 +67,7 @@ const UserMenu = () => {
             <Avatar src="" />
           </div>
         </div>
+        <Cart />
       </div>
       {isOpen && (
         <div
@@ -89,18 +92,18 @@ const UserMenu = () => {
                   onClick={() => router.push('/trips')}
                 />
                 <MenuItem
-                  label="My favorites"
+                  label="WishList"
                   onClick={() => router.push('/favorites')}
                 />
                 <MenuItem
-                  label="My reservations"
+                  label="Cart"
                   onClick={() => router.push('/reservations')}
                 />
                 <MenuItem
                   label="My properties"
                   onClick={() => router.push('/properties')}
                 />
-                <MenuItem label="Airbnb your home" onClick={rentModal.onOpen} />
+
                 <hr />
                 <MenuItem
                   label="Logout"

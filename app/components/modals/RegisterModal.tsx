@@ -58,7 +58,10 @@ const RegisterModal = () => {
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
-      <Heading title="Welcome to Airbnb" subtitle="Create an account!" />
+      <Heading
+        title="Welcome !"
+        subtitle="Email로 간편하게 계정을 만들어보세요 !"
+      />
       <Input
         id="email"
         label="Email"
@@ -92,19 +95,19 @@ const RegisterModal = () => {
       <hr />
       <Button
         outline
-        label="Continue with Google"
+        label="Google로 시작하기"
         icon={FcGoogle}
         onClick={() => console.log('google')}
       />
       <Button
         outline
-        label="Continue with Github"
+        label="Github으로 시작하기"
         icon={AiFillGithub}
         onClick={() => console.log('github')}
       />
       <div className="text-neutral-500 text-center mt-4 font-light">
         <p>
-          Already have an account?
+          이미 회원이신가요 ?
           <span
             onClick={onToggle}
             className="
@@ -114,7 +117,7 @@ const RegisterModal = () => {
             "
           >
             {' '}
-            Log in
+            Login
           </span>
         </p>
       </div>
@@ -126,7 +129,7 @@ const RegisterModal = () => {
       disabled={isLoading}
       isOpen={registerModal.isOpen}
       title="Register"
-      actionLabel="Continue"
+      actionLabel="회원가입"
       onClose={registerModal.onClose}
       onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}
