@@ -9,6 +9,7 @@ import './globals.css'
 import getCurrentUser from './actions/getCurrentUser'
 import ToasterProvider from './providers/ToasterProvider'
 import CategoryModal from './components/modals/CategoryAddModal'
+import getCategorys from './actions/getCategorys'
 
 export const metadata = {
   title: 'zhuro',
@@ -25,6 +26,7 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   const currentUser = await getCurrentUser()
+  const categorys = await getCategorys()
 
   return (
     <html lang="en">
@@ -33,7 +35,7 @@ export default async function RootLayout({
           <ToasterProvider />
           <LoginModal />
           <RegisterModal />
-          <CategoryModal />
+          <CategoryModal categorys={categorys} />
           <Navbar currentUser={currentUser} />
         </ClientOnly>
         <div className="pb-20 pt-28">{children}</div>
