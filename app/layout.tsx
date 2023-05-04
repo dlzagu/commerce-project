@@ -8,6 +8,7 @@ import ClientOnly from './components/ClientOnly'
 import './globals.css'
 import getCurrentUser from './actions/getCurrentUser'
 import ToasterProvider from './providers/ToasterProvider'
+import CategoryModal from './components/modals/CategoryAddModal'
 
 export const metadata = {
   title: 'zhuro',
@@ -32,6 +33,7 @@ export default async function RootLayout({
           <ToasterProvider />
           <LoginModal />
           <RegisterModal />
+          <CategoryModal />
           <Navbar currentUser={currentUser} />
         </ClientOnly>
         <div className="pb-20 pt-28">{children}</div>
