@@ -48,3 +48,5 @@ const CategoryInfo: React.FC<CategoryInfoProps> = ({
     </div>
   )
 }
+
+export default CategoryInfo

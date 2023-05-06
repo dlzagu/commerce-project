@@ -12,6 +12,7 @@ import Modal from '../Modal'
 import ImageUpload from '../inputs/ImageUpload'
 import Input from '../inputs/Input'
 import Heading from '../Heading'
+import CategoryInfo from '../category/CategoryInfo'
 
 interface CategorysClientProps {
   categorys: Category[]
@@ -23,6 +24,7 @@ const CategoryModal: React.FC<CategorysClientProps> = ({ categorys }) => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [isCategorys, setIsCategorys] = useState(false)
+  const [deletingId, setDeletingId] = useState('')
 
   const {
     register,
@@ -75,6 +77,25 @@ const CategoryModal: React.FC<CategorysClientProps> = ({ categorys }) => {
         setIsLoading(false)
       })
   }
+  const onCancel = useCallback(
+    (id: string) => {
+      setDeletingId(id)
+
+      axios
+        .delete(`/api/categorys/${id}`)
+        .then(() => {
+          toast.success('Reservation cancelled')
+          router.refresh()
+        })
+        .catch((error) => {
+          toast.error(error?.response?.data?.error)
+        })
+        .finally(() => {
+          setDeletingId('')
+        })
+    },
+    [router]
+  )
 
   const secondaryAction = useCallback(() => {
     setIsCategorys(true)
@@ -84,34 +105,62 @@ const CategoryModal: React.FC<CategorysClientProps> = ({ categorys }) => {
   let bodyContent = (
     <div className="flex flex-col gap-8">
       <Heading title="카테고리를 등록해주세요" />
-      <Input
-        id="name"
-        label="카테고리 이름"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-        required
-      />
-      <Input
-        id="description"
-        label="카테고리 한줄 소개"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-        required
-      />
-      <hr />
-      <ImageUpload
-        onChange={(value) => setCustomValue('image', value)}
-        value={image}
-      />
+      <div
+        className="max-h-[70vh]
+          overflow-y-auto"
+      >
+        <Input
+          id="name"
+          label="카테고리 이름"
+          disabled={isLoading}
+          register={register}
+          errors={errors}
+          required
+        />
+        <Input
+          id="description"
+          label="카테고리 한줄 소개"
+          disabled={isLoading}
+          register={register}
+          errors={errors}
+          required
+        />
+        <hr />
+        <ImageUpload
+          onChange={(value) => setCustomValue('image', value)}
+          value={image}
+        />
+      </div>
     </div>
   )
 
   if (isCategorys) {
     bodyContent = (
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-8 h-full">
         <Heading title="카테고리 목록" />
+        <div
+          className="
+          grid 
+          grid-cols-1 
+          sm:grid-cols-2 
+          md:grid-cols-3 
+          xl:grid-cols-4
+          gap-8
+          max-h-[50vh]
+          overflow-y-auto
+        "
+        >
+          {categorys.map((category) => (
+            <CategoryInfo
+              key={category.id}
+              category={category}
+              actionLabel="삭제"
+              actionId={category.id}
+              onAction={onCancel}
+              disabled={deletingId === category.id}
+            />
+          ))}
+        </div>
       </div>
     )
   }
