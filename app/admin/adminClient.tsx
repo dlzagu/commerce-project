@@ -6,8 +6,10 @@ import Button from '../components/Button'
 import { BiCategoryAlt } from 'react-icons/bi'
 import { SiProducthunt } from 'react-icons/si'
 import useCategoryAddModal from '../hooks/useCategoryAddModal'
+import useProductAddModal from '../hooks/useProductAddModal'
 const AdminClient = () => {
   const categoryModal = useCategoryAddModal()
+  const productModal = useProductAddModal()
   return (
     <Container>
       <Heading title="상품등록" subtitle="상품을 등록하고 수정해주세요!" />
@@ -22,7 +24,7 @@ const AdminClient = () => {
           outline
           label="상품 등록하기"
           icon={SiProducthunt}
-          onClick={() => console.log('ji')}
+          onClick={productModal.onOpen}
         />
       </div>
 

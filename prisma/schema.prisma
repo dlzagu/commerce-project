@@ -17,16 +17,17 @@ model Product {
   name        String      @unique
   image       String
   description String?
-  sizes       String[]   @default(["S","M","L","XL"])
+  sizes       String[]   @default(["XXS","XS","S","M","L","XL","XXL"])
   quantity    Int
   price       Int
   categoryId  String      @db.ObjectId
-  orderItems  OrderItem[]
+
   createdAt   DateTime    @default(now())
   updatedAt   DateTime?
   deleted     Boolean     @default(false) // soft delete
 
-   category Category @relation(fields: [categoryId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+  orderItems  OrderItem[]
 }
 
 model Category {

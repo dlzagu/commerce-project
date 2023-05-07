@@ -14,16 +14,16 @@ import Input from '../inputs/Input'
 import Heading from '../Heading'
 import CategoryInfo from '../category/CategoryInfo'
 
-interface CategorysClientProps {
-  categorys: Category[]
+interface CategoriesClientProps {
+  categories: Category[]
 }
 
-const CategoryModal: React.FC<CategorysClientProps> = ({ categorys }) => {
+const CategoryModal: React.FC<CategoriesClientProps> = ({ categories }) => {
   const router = useRouter()
   const categoryModal = useCategoryAddModal()
 
   const [isLoading, setIsLoading] = useState(false)
-  const [isCategorys, setIsCategorys] = useState(false)
+  const [isCategories, setIsCategories] = useState(false)
   const [deletingId, setDeletingId] = useState('')
 
   const {
@@ -43,12 +43,12 @@ const CategoryModal: React.FC<CategorysClientProps> = ({ categorys }) => {
 
   const image = watch('image')
   const actionLabel = useMemo(() => {
-    if (isCategorys) {
+    if (isCategories) {
       return '뒤로가기'
     }
 
     return '등록'
-  }, [isCategorys])
+  }, [isCategories])
 
   const setCustomValue = (id: string, value: any) => {
     setValue(id, value, {
@@ -60,10 +60,10 @@ const CategoryModal: React.FC<CategorysClientProps> = ({ categorys }) => {
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     const { name, image } = data
-    if (actionLabel == '뒤로가기') return setIsCategorys(false)
+    if (actionLabel == '뒤로가기') return setIsCategories(false)
     if (name == '' || image == ' ') return null
     axios
-      .post('/api/categorys', data)
+      .post('/api/categories', data)
       .then(() => {
         toast.success('Listing created!')
         router.refresh()
@@ -77,12 +77,13 @@ const CategoryModal: React.FC<CategorysClientProps> = ({ categorys }) => {
         setIsLoading(false)
       })
   }
+
   const onCancel = useCallback(
     (id: string) => {
       setDeletingId(id)
 
       axios
-        .delete(`/api/categorys/${id}`)
+        .delete(`/api/categories/${id}`)
         .then(() => {
           toast.success('Reservation cancelled')
           router.refresh()
@@ -98,9 +99,8 @@ const CategoryModal: React.FC<CategorysClientProps> = ({ categorys }) => {
   )
 
   const secondaryAction = useCallback(() => {
-    setIsCategorys(true)
-    console.log(categorys)
-  }, [isCategorys])
+    setIsCategories(true)
+  }, [isCategories])
 
   let bodyContent = (
     <div className="flex flex-col gap-8">
@@ -134,7 +134,7 @@ const CategoryModal: React.FC<CategorysClientProps> = ({ categorys }) => {
     </div>
   )
 
-  if (isCategorys) {
+  if (isCategories) {
     bodyContent = (
       <div className="flex flex-col gap-8 h-full">
         <Heading title="카테고리 목록" />
@@ -150,7 +150,7 @@ const CategoryModal: React.FC<CategorysClientProps> = ({ categorys }) => {
           overflow-y-auto
         "
         >
-          {categorys.map((category) => (
+          {categories.map((category) => (
             <CategoryInfo
               key={category.id}
               category={category}

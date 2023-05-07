@@ -8,11 +8,11 @@ export interface ICategorysParams {
   product?: string[]
 }
 
-export default async function getCategorys() {
+export default async function getCategories() {
   try {
-    const listings = await prisma.category.findMany()
+    const categories = await prisma.category.findMany()
 
-    return listings
+    return categories
   } catch (error: any) {
     throw new Error(error)
   }
