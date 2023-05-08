@@ -4,10 +4,11 @@ import axios from 'axios'
 import { toast } from 'react-hot-toast'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
-import useProductAddModal from '@/app/hooks/useProductAddModal'
+import useProductEditModal from '@/app/hooks/useProductEditModal'
 import { Category } from '@prisma/client'
+import { SafeProduct } from '@/app/types'
 
 import Modal from '../Modal'
 import SelectInput from '../inputs/SelectInput'
@@ -16,8 +17,9 @@ import Input from '../inputs/Input'
 import Heading from '../Heading'
 import { DEFAULT_SIZES } from '@/app/constants'
 
-interface ProductAddClientProps {
-  categories: Category[]
+interface ProductEditClientProps {
+  categories?: Category[]
+  product: SafeProduct | null
 }
 enum STEPS {
   CATEGORY = 0,
@@ -27,10 +29,12 @@ enum STEPS {
   PRICE = 4,
 }
 
-const ProductAddModal: React.FC<ProductAddClientProps> = ({ categories }) => {
+const ProductEditModal: React.FC<ProductEditClientProps> = ({
+  categories,
+  product,
+}) => {
   const router = useRouter()
-  const productAddModal = useProductAddModal()
-
+  const productEditModal = useProductEditModal()
   const [isLoading, setIsLoading] = useState(false)
   const [step, setStep] = useState(STEPS.CATEGORY)
 
@@ -44,15 +48,26 @@ const ProductAddModal: React.FC<ProductAddClientProps> = ({ categories }) => {
     reset,
   } = useForm<FieldValues>({
     defaultValues: {
-      categoryId: '',
-      image: '',
-      price: 1,
-      sizes: [],
-      quantity: 0,
-      name: '',
-      description: '',
+      name: product?.name,
+      categoryId: product?.categoryId,
+      image: product?.image,
+      price: product?.price,
+      sizes: product?.sizes,
+      quantity: product?.quantity,
+      description: product?.description,
     },
   })
+  useEffect(() => {
+    reset({
+      name: product?.name,
+      categoryId: product?.categoryId,
+      image: product?.image,
+      price: product?.price,
+      sizes: product?.sizes,
+      quantity: product?.quantity,
+      description: product?.description,
+    })
+  }, [product, reset])
 
   const categoryId = watch('categoryId')
   const sizes = watch('sizes')
@@ -94,13 +109,13 @@ const ProductAddModal: React.FC<ProductAddClientProps> = ({ categories }) => {
     setIsLoading(true)
 
     axios
-      .post('/api/products', data)
+      .put(`/api/products/${product?.id}`, data)
       .then(() => {
-        toast.success('상품 등록 완료')
+        toast.success('상품 수정 완료')
         router.refresh()
         reset()
         setStep(STEPS.CATEGORY)
-        productAddModal.onClose()
+        productEditModal.onClose()
       })
       .catch(() => {
         toast.error('Something went wrong.')
@@ -112,7 +127,7 @@ const ProductAddModal: React.FC<ProductAddClientProps> = ({ categories }) => {
 
   const actionLabel = useMemo(() => {
     if (step === STEPS.PRICE) {
-      return '상품 추가'
+      return '상품 수정'
     }
 
     return '다음'
@@ -125,6 +140,10 @@ const ProductAddModal: React.FC<ProductAddClientProps> = ({ categories }) => {
 
     return '이전'
   }, [step])
+
+  useEffect(() => {
+    console.log(product)
+  }, [product])
 
   let bodyContent = (
     <div className="flex flex-col gap-8">
@@ -139,7 +158,7 @@ const ProductAddModal: React.FC<ProductAddClientProps> = ({ categories }) => {
           overflow-y-auto
         "
       >
-        {categories.map((item) => (
+        {categories?.map((item) => (
           <div key={item.name} className="col-span-1">
             <SelectInput
               onClick={(categoryId) => setCustomValue('categoryId', categoryId)}
@@ -169,7 +188,7 @@ const ProductAddModal: React.FC<ProductAddClientProps> = ({ categories }) => {
   if (step === STEPS.DESCRIPTION) {
     bodyContent = (
       <div className="flex flex-col gap-8">
-        <Heading title="제품과 내용을 입력해주세요." />
+        <Heading title="제품과 내용을 수정해주세요." />
         <Input
           id="name"
           label="상품이름"
@@ -222,7 +241,7 @@ const ProductAddModal: React.FC<ProductAddClientProps> = ({ categories }) => {
   if (step === STEPS.PRICE) {
     bodyContent = (
       <div className="flex flex-col gap-8">
-        <Heading title="가격과 재고를 입력해주세요." />
+        <Heading title="가격과 재고를 수정해주세요." />
         <Input
           id="price"
           label="가격(원)"
@@ -249,16 +268,16 @@ const ProductAddModal: React.FC<ProductAddClientProps> = ({ categories }) => {
   return (
     <Modal
       disabled={isLoading}
-      isOpen={productAddModal.isOpen}
-      title="상품등록"
+      isOpen={productEditModal.isOpen}
+      title="상품수정"
       actionLabel={actionLabel}
       onSubmit={handleSubmit(onSubmit)}
       secondaryActionLabel={secondaryActionLabel}
       secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
-      onClose={productAddModal.onClose}
+      onClose={productEditModal.onClose}
       body={bodyContent}
     />
   )
 }
 
-export default ProductAddModal
+export default ProductEditModal

@@ -1,8 +1,14 @@
 import EmptyState from '@/app/components/EmptyState'
 import ClientOnly from '@/app/components/ClientOnly'
 import AdminClient from './adminClient'
+import getCurrentUser from '../actions/getCurrentUser'
+import getProducts from '../actions/getProucts'
+import getCategories from '../actions/getCategories'
 
 const AdminPage = async () => {
+  const currentUser = await getCurrentUser()
+  const products = await getProducts()
+  const categories = await getCategories()
   //   if (listings.length === 0) {
   //     return (
   //       <ClientOnly>
@@ -13,7 +19,11 @@ const AdminPage = async () => {
 
   return (
     <ClientOnly>
-      <AdminClient />
+      <AdminClient
+        currentUser={currentUser}
+        products={products}
+        categories={categories}
+      />
     </ClientOnly>
   )
 }

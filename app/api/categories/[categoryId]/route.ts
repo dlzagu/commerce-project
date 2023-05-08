@@ -23,11 +23,11 @@ export async function DELETE(
     throw new Error('Invalid ID')
   }
 
-  const reservation = await prisma.category.deleteMany({
+  const category = await prisma.category.deleteMany({
     where: {
       id: categoryId,
     },
   })
 
-  return NextResponse.json(reservation)
+  return NextResponse.json(category)
 }

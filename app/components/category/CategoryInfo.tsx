@@ -31,7 +31,10 @@ const CategoryInfo: React.FC<CategoryInfoProps> = ({
   )
 
   return (
-    <div className="col-span-1 cursor-pointer group">
+    <div
+      className="col-span-1 cursor-pointer group rounded-xl
+    border-2 border-neutral-200 p-2"
+    >
       <div className="flex flex-col gap-2 w-full">
         <div className="font-semibold text-lg">{category?.name}</div>
         <div className="font-light text-neutral-500">
