@@ -21,10 +21,12 @@ interface ProductAddClientProps {
 }
 enum STEPS {
   CATEGORY = 0,
-  IMAGES = 1,
-  DESCRIPTION = 2,
-  SIZES = 3,
-  PRICE = 4,
+  MAIN_IMAGE = 1,
+  SUB_IMAGE = 2,
+  SUB_IMAGE2 = 3,
+  DESCRIPTION = 4,
+  SIZES = 5,
+  PRICE = 6,
 }
 
 const ProductAddModal: React.FC<ProductAddClientProps> = ({ categories }) => {
@@ -45,7 +47,7 @@ const ProductAddModal: React.FC<ProductAddClientProps> = ({ categories }) => {
   } = useForm<FieldValues>({
     defaultValues: {
       categoryId: '',
-      image: '',
+      images: [],
       price: 1,
       sizes: [],
       quantity: 0,
@@ -56,7 +58,7 @@ const ProductAddModal: React.FC<ProductAddClientProps> = ({ categories }) => {
 
   const categoryId = watch('categoryId')
   const sizes = watch('sizes')
-  const image = watch('image')
+  const images = watch('images')
 
   const setCustomValue = (id: string, value: any) => {
     setValue(id, value, {
@@ -154,13 +156,37 @@ const ProductAddModal: React.FC<ProductAddClientProps> = ({ categories }) => {
     </div>
   )
 
-  if (step === STEPS.IMAGES) {
+  if (step === STEPS.MAIN_IMAGE) {
     bodyContent = (
       <div className="flex flex-col gap-8">
-        <Heading title="메인 사진을 업로드해주세요." />
+        <Heading title="메인 이미지를 업로드해주세요." />
         <ImageUpload
-          onChange={(value) => setCustomValue('image', value)}
-          value={image}
+          onChange={(value) => setCustomValue('images', [...images, value])}
+          value={images[0]}
+        />
+      </div>
+    )
+  }
+
+  if (step === STEPS.SUB_IMAGE) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <Heading title="서브 이미지를 업로드해주세요." />
+        <ImageUpload
+          onChange={(value) => setCustomValue('images', [...images, value])}
+          value={images[1]}
+        />
+      </div>
+    )
+  }
+
+  if (step === STEPS.SUB_IMAGE2) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <Heading title="두번째 서브이미지를 업로드해주세요." />
+        <ImageUpload
+          onChange={(value) => setCustomValue('images', [...images, value])}
+          value={images[2]}
         />
       </div>
     )

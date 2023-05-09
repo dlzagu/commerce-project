@@ -1,13 +1,21 @@
 import prisma from '@/app/libs/prismadb'
 
-export default async function getProductsById(productId: string) {
+interface IParams {
+  productId?: string
+}
+
+export default async function getProductsById(params: IParams) {
   try {
+    const { productId } = params
     const product = await prisma.product.findFirst({
       where: { id: productId },
       orderBy: {
         createdAt: 'desc',
       },
     })
+    if (!product) {
+      return null
+    }
 
     const safeProduct = {
       ...product,

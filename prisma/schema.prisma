@@ -15,7 +15,7 @@ datasource db {
 model Product {
   id          String      @id @default(auto()) @map("_id") @db.ObjectId
   name        String      @unique
-  image       String
+  images      String[]
   description String?
   sizes       String[]   @default(["XXS","XS","S","M","L","XL","XXL"])
   quantity    Int
