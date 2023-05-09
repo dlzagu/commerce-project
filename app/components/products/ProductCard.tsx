@@ -57,7 +57,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     [disabled, secondaryAction, actionId]
   )
 
-  const { name, price, id, image } = data
+  const { name, price, id, images } = data
 
   return (
     <div
@@ -83,7 +83,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
               group-hover:scale-110 
               transition
             "
-            src={image}
+            src={images[0]}
             alt="Listing"
           />
           <div
@@ -96,10 +96,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
             <HeartButton productId={data.id} currentUser={currentUser} />
           </div>
         </div>
-        <div className="font-semibold text-lg">{name}</div>
-        <div className="font-light text-neutral-500"></div>
-        <div className="flex flex-row items-center gap-1">
-          <div className="font-semibold">{price} 원</div>
+        <div className="mt-4 flex justify-between">
+          <div>
+            <h3 className="text-sm text-gray-700">{name}</h3>
+            <p className="mt-1 text-sm text-gray-500">925 silver</p>
+          </div>
+          <p className="text-sm font-medium text-gray-900">{price} won</p>
         </div>
         <div className="flex flex-row items-center gap-4 w-full">
           {onAction && actionLabel && (

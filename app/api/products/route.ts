@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server'
 
 import prisma from '@/app/libs/prismadb'
+import { DEFAULT_SIZES } from '@/app/constants'
 
 export async function POST(request: Request) {
   const body = await request.json()
-  const { images, name, sizes, description, quantity, categoryId, price } = body
+  let { images, name, sizes, description, quantity, categoryId, price } = body
 
   const product = await prisma.product.create({
     data: {
