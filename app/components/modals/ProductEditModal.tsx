@@ -73,7 +73,7 @@ const ProductEditModal: React.FC<ProductEditClientProps> = ({
 
   const categoryId = watch('categoryId')
   const sizes = watch('sizes')
-  const images = watch('image')
+  const images = watch('images')
 
   const setCustomValue = (id: string, value: any) => {
     setValue(id, value, {
@@ -180,7 +180,13 @@ const ProductEditModal: React.FC<ProductEditClientProps> = ({
       <div className="flex flex-col gap-8">
         <Heading title="메인 이미지를 업로드해주세요." />
         <ImageUpload
-          onChange={(value) => setCustomValue('images', [...images, value])}
+          onChange={(value) => {
+            if (images[0]) {
+              const newImages = [...images]
+              newImages[0] = value
+              setCustomValue('images', newImages)
+            } else setCustomValue('images', [...images, value])
+          }}
           value={images[0]}
         />
       </div>
@@ -192,7 +198,13 @@ const ProductEditModal: React.FC<ProductEditClientProps> = ({
       <div className="flex flex-col gap-8">
         <Heading title="서브 이미지를 업로드해주세요." />
         <ImageUpload
-          onChange={(value) => setCustomValue('images', [...images, value])}
+          onChange={(value) => {
+            if (images[1]) {
+              const newImages = [...images]
+              newImages[1] = value
+              setCustomValue('images', newImages)
+            } else setCustomValue('images', [...images, value])
+          }}
           value={images[1]}
         />
       </div>
@@ -204,7 +216,13 @@ const ProductEditModal: React.FC<ProductEditClientProps> = ({
       <div className="flex flex-col gap-8">
         <Heading title="두번째 서브이미지를 업로드해주세요." />
         <ImageUpload
-          onChange={(value) => setCustomValue('images', [...images, value])}
+          onChange={(value) => {
+            if (images[2]) {
+              const newImages = [...images]
+              newImages[2] = value
+              setCustomValue('images', newImages)
+            } else setCustomValue('images', [...images, value])
+          }}
           value={images[2]}
         />
       </div>

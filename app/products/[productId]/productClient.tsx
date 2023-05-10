@@ -50,7 +50,7 @@ const ProductClient: React.FC<ProductClientProps> = ({ product }) => {
             <form className="mt-6">
               {/* Colors */}
               <div>
-                <h3 className="text-sm text-on-background text-opacity-80">
+                <h3 className="text-sm text-on-background text-opacity-80 mb-3">
                   Material
                 </h3>
 

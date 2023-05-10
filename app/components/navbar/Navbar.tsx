@@ -24,7 +24,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
             items-center 
             justify-between
             gap-3
-            md:gap-0
+            md:gap-0  w-full
           "
           >
             <Logo />

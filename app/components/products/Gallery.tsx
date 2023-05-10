@@ -1,6 +1,7 @@
 import { FunctionComponent } from 'react'
 
 import { Tab } from '@headlessui/react'
+import Image from 'next/image'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -24,7 +25,9 @@ const Gallery: FunctionComponent<GalleryProps> = ({ images }) => {
                 <>
                   <span className="sr-only">{image}</span>
                   <span className="overflow-hidden absolute inset-0 rounded-md">
-                    <img
+                    <Image
+                      width={500}
+                      height={500}
                       src={image}
                       alt=""
                       className="object-cover object-center w-full h-full"
@@ -47,9 +50,11 @@ const Gallery: FunctionComponent<GalleryProps> = ({ images }) => {
       <Tab.Panels className="w-full aspect-w-1 aspect-h-1">
         {images.map((image) => (
           <Tab.Panel key={image}>
-            <img
+            <Image
               src={image}
               alt={image}
+              width={500}
+              height={500}
               className="object-cover object-center w-full h-full sm:rounded-lg"
             />
           </Tab.Panel>

@@ -1,4 +1,4 @@
-import { Nunito } from 'next/font/google'
+import { Roboto } from 'next/font/google'
 
 import Navbar from './components/navbar/Navbar'
 import LoginModal from '@/app/components/modals/LoginModal'
@@ -17,7 +17,8 @@ export const metadata = {
   description: 'welcome to zhuro shop',
 }
 
-const font = Nunito({
+const font = Roboto({
+  weight: '400',
   subsets: ['latin'],
 })
 

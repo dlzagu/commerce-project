@@ -65,27 +65,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
       className="col-span-1 cursor-pointer group"
     >
       <div className="flex flex-col gap-2 w-full">
-        <div
-          className="
-            aspect-square 
-            w-full 
-            relative 
-            overflow-hidden 
-            rounded-xl
-          "
-        >
-          <Image
-            fill
-            className="
-              object-cover 
-              h-full 
-              w-full 
-              group-hover:scale-110 
-              transition
-            "
-            src={images[0]}
-            alt="Listing"
-          />
+        <div key={id} className="group relative">
+          <div className="w-full h-56 bg-gray-200 rounded-md overflow-hidden group-hover:opacity-75 lg:h-72 xl:h-80">
+            <img
+              src={images[0]}
+              alt="product"
+              className="w-full h-full object-center object-cover"
+            />
+          </div>
           <div
             className="
             absolute
@@ -95,13 +82,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
           >
             <HeartButton productId={data.id} currentUser={currentUser} />
           </div>
-        </div>
-        <div className="mt-4 flex justify-between">
-          <div>
-            <h3 className="text-sm text-gray-700">{name}</h3>
-            <p className="mt-1 text-sm text-gray-500">925 silver</p>
-          </div>
-          <p className="text-sm font-medium text-gray-900">{price} won</p>
+          <h3 className="mt-4 text-sm text-gray-700">
+            <span className="absolute inset-0" />
+            {name}
+          </h3>
+          <p className="mt-1 text-sm text-gray-500">925 silver</p>
+          <p className="mt-1 text-sm font-medium text-gray-900">{price}</p>
         </div>
         <div className="flex flex-row items-center gap-4 w-full">
           {onAction && actionLabel && (
