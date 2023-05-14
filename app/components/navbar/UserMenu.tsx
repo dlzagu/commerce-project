@@ -77,7 +77,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
               <>
                 <MenuItem label="Admin" onClick={() => router.push('/admin')} />
                 <MenuItem
-                  label="WishList"
+                  label="좋아요"
                   onClick={() => router.push('/favorites')}
                 />
                 <MenuItem

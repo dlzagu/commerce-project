@@ -1,6 +1,7 @@
 'use client'
 
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
+import { HiOutlineHeart, HiHeart } from 'react-icons/hi'
 
 import useFavorite from '@/app/hooks/useFavorite'
 import { SafeUser } from '@/app/types'
@@ -31,19 +32,11 @@ const HeartButton: React.FC<HeartButtonProps> = ({
         cursor-pointer
       "
     >
-      <AiOutlineHeart
-        size={28}
-        className="
-          fill-white
-          absolute
-          -top-[2px]
-          -right-[2px]
-        "
-      />
-      <AiFillHeart
-        size={24}
-        className={hasFavorited ? 'fill-rose-500' : 'fill-neutral-500/70'}
-      />
+      {hasFavorited ? (
+        <HiHeart className="shrink-0 w-6 h-6" aria-hidden="true" />
+      ) : (
+        <HiOutlineHeart className="shrink-0 w-6 h-6" aria-hidden="true" />
+      )}
     </div>
   )
 }

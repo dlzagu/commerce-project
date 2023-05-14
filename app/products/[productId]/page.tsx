@@ -10,7 +10,6 @@ interface IParams {
 
 const ProductPage = async ({ params }: { params: IParams }) => {
   const product = await getProductById(params)
-
   const currentUser = await getCurrentUser()
 
   if (!product) {
@@ -23,7 +22,7 @@ const ProductPage = async ({ params }: { params: IParams }) => {
 
   return (
     <ClientOnly>
-      <ProductClient product={product} />
+      <ProductClient product={product} currentUser={currentUser} />
     </ClientOnly>
   )
 }

@@ -1,16 +1,17 @@
 'use client'
 
 import Container from '@/app/components/Container'
-import { SafeProduct } from '@/app/types'
-import { useState } from 'react'
+import { SafeProduct, SafeUser } from '@/app/types'
+import { useEffect, useState } from 'react'
 
 import { Disclosure, RadioGroup } from '@headlessui/react'
-import { HiOutlineHeart, HiMinusSm, HiPlusSm, HiStar } from 'react-icons/hi'
+import { HiMinusSm, HiPlusSm } from 'react-icons/hi'
 
 import Button from '@/app/components/Button'
 
 import Gallery from '@/app/components/products/Gallery'
 import { DEFAULT_SIZES, DEFAULT_DETAILS } from '@/app/constants'
+import HeartButton from '@/app/components/HeartButton'
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
@@ -18,10 +19,17 @@ function classNames(...classes: any) {
 
 interface ProductClientProps {
   product: SafeProduct
+  currentUser: SafeUser | null
 }
 
-const ProductClient: React.FC<ProductClientProps> = ({ product }) => {
+const ProductClient: React.FC<ProductClientProps> = ({
+  product,
+  currentUser,
+}) => {
   const [selectedSize, setSelectedSize] = useState(product.sizes[0])
+  useEffect(() => {
+    console.log(currentUser)
+  })
   return (
     <Container>
       <div className="p-4 mx-auto max-w-2xl sm:px-6 lg:px-8 lg:max-w-7xl">
@@ -153,9 +161,9 @@ const ProductClient: React.FC<ProductClientProps> = ({ product }) => {
                   type="button"
                   className="flex justify-center items-center p-3 ml-4 rounded-md bg-background text-on-background hover:text-on-secondary hover:bg-secondary"
                 >
-                  <HiOutlineHeart
-                    className="shrink-0 w-6 h-6"
-                    aria-hidden="true"
+                  <HeartButton
+                    productId={product.id}
+                    currentUser={currentUser}
                   />
                   <span className="sr-only">Add to favorites</span>
                 </button>
