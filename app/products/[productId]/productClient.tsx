@@ -10,8 +10,14 @@ import { HiMinusSm, HiPlusSm } from 'react-icons/hi'
 import Button from '@/app/components/Button'
 
 import Gallery from '@/app/components/products/Gallery'
-import { DEFAULT_SIZES, DEFAULT_DETAILS } from '@/app/constants'
+import {
+  DEFAULT_SIZES,
+  DEFAULT_DETAILS,
+  LIMIT_CART_SIZE,
+} from '@/app/constants'
 import HeartButton from '@/app/components/HeartButton'
+import useCartItem from '@/app/hooks/useCartItem'
+import { toast } from 'react-hot-toast'
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
@@ -27,24 +33,50 @@ const ProductClient: React.FC<ProductClientProps> = ({
   currentUser,
 }) => {
   const [selectedSize, setSelectedSize] = useState(product.sizes[0])
+  const [size, setSize] = useState<string | undefined>()
+  const { cartItems, addItem } = useCartItem()
+  const { id, name, images, sizes, price } = product
+
+  const handleAddToCart = (e: any) => {
+    e.preventDefault()
+    if (!size) return toast.error(`사이즈를 선택해주세요`)
+    if (cartItems.length >= LIMIT_CART_SIZE) {
+      return toast.error(
+        `장바구니는 ${LIMIT_CART_SIZE} 개의 상품이 최대입니다.`
+      )
+    }
+    addItem({
+      id,
+      name,
+      image: images[0],
+      size,
+      price,
+      quantity: 1,
+    })
+    setSize(undefined)
+    setTimeout(() => {
+      toast.success('추가 완료')
+    }, 200)
+  }
   useEffect(() => {
-    console.log(currentUser)
-  })
+    console.log(cartItems)
+  }, [cartItems])
+
   return (
     <Container>
       <div className="p-4 mx-auto max-w-2xl sm:px-6 lg:px-8 lg:max-w-7xl">
         <div className="lg:grid lg:grid-cols-2 lg:gap-x-8 lg:items-start">
-          <Gallery images={product.images} />
+          <Gallery images={images} />
 
           {/* Product info */}
           <div className="px-4 mt-10 sm:px-0 sm:mt-16 lg:mt-0">
             <h1 className="text-3xl font-extrabold tracking-tight text-on-background">
-              {product.name}
+              {name}
             </h1>
 
             <div className="mt-3">
               <h2 className="sr-only">Product information</h2>
-              <p className="text-3xl text-on-background">{product.price} won</p>
+              <p className="text-3xl text-on-background">{price} won</p>
             </div>
 
             <div className="mt-6">
@@ -95,14 +127,14 @@ const ProductClient: React.FC<ProductClientProps> = ({
                     Choose a size
                   </RadioGroup.Label>
                   <div className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
-                    {DEFAULT_SIZES.map((size) => (
+                    {DEFAULT_SIZES.map((curSize) => (
                       <RadioGroup.Option
-                        key={size}
-                        value={size}
-                        disabled={!product.sizes.includes(size)}
+                        key={curSize}
+                        value={curSize}
+                        disabled={!product.sizes.includes(curSize)}
                         className={({ active }) =>
                           classNames(
-                            product.sizes.includes(size)
+                            sizes.includes(curSize)
                               ? 'cursor-pointer bg-white text-gray-900 shadow-sm'
                               : 'cursor-not-allowed bg-gray-50 text-gray-200',
                             active ? 'ring-2 ring-stone-900' : '',
@@ -112,10 +144,16 @@ const ProductClient: React.FC<ProductClientProps> = ({
                       >
                         {({ active, checked }) => (
                           <>
-                            <RadioGroup.Label as="span">
-                              {size}
+                            <RadioGroup.Label
+                              as="span"
+                              onClick={() => {
+                                console.log('click')
+                                setSize(curSize)
+                              }}
+                            >
+                              {curSize}
                             </RadioGroup.Label>
-                            {product.sizes.includes(size) ? (
+                            {product.sizes.includes(curSize) ? (
                               <span
                                 className={classNames(
                                   active ? 'border' : 'border-2',
@@ -156,7 +194,7 @@ const ProductClient: React.FC<ProductClientProps> = ({
               </div>
 
               <div className="flex mt-10 sm:flex-col1">
-                <Button label="Add to bag" onClick={() => {}} />
+                <Button label="Add to bag" onClick={handleAddToCart} />
                 <button
                   type="button"
                   className="flex justify-center items-center p-3 ml-4 rounded-md bg-background text-on-background hover:text-on-secondary hover:bg-secondary"

@@ -13,3 +13,5 @@ export const DEFAULT_DETAILS = [
     ],
   },
 ]
+
+export const LIMIT_CART_SIZE = 5

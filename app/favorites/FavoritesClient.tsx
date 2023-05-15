@@ -1,3 +1,5 @@
+'use client'
+
 import { SafeProduct, SafeUser } from '@/app/types'
 
 import Heading from '@/app/components/Heading'
