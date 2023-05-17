@@ -14,6 +14,7 @@ interface CartStore {
   cartItems: CartItem[]
   addItem: (item: CartItem) => void
   removeItem: (idx: number) => void
+  removeAllItem: () => void
 }
 
 const useCartItem = create<CartStore>(
@@ -25,6 +26,10 @@ const useCartItem = create<CartStore>(
       removeItem: (idx: number) =>
         set((state: CartStore) => ({
           cartItems: state.cartItems.filter((_, index) => index !== idx),
+        })),
+      removeAllItem: () =>
+        set((state: CartStore) => ({
+          cartItems: [],
         })),
     }),
     {

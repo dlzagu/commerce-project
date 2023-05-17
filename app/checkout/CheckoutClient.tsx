@@ -21,6 +21,8 @@ interface CheckoutClientProps {
 const CheckoutClient: React.FC<CheckoutClientProps> = ({ currentUser }) => {
   const { cartItems } = useCartItem()
   const [isLoading, setIsLoading] = useState(false)
+  const { removeAllItem } = useCartItem()
+  const loginModal = useLoginModal()
   const router = useRouter()
 
   const totalPrice = useMemo(
@@ -50,17 +52,17 @@ const CheckoutClient: React.FC<CheckoutClientProps> = ({ currentUser }) => {
   const cardNumber = watch('cardNumber')
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     if (cardNumber !== TEST_CARD_NUMNER) return toast.error('wrong card number')
+    if (!currentUser) return loginModal.onOpen()
 
     setIsLoading(true)
     data.items = cartItems
-
-    console.log(data)
 
     axios
       .post('/api/order', data)
       .then(() => {
         toast.success('주문 완료')
         router.refresh()
+        removeAllItem()
         reset()
       })
       .catch(() => {
@@ -75,7 +77,7 @@ const CheckoutClient: React.FC<CheckoutClientProps> = ({ currentUser }) => {
     <Container>
       {cartItems.length == 0 ? (
         <EmptyState
-          title="상품이 없습니다."
+          title="결제할 상품이 없습니다."
           subtitle="상품을 장바구니에 담아주세요"
         />
       ) : (
@@ -220,6 +222,7 @@ const CheckoutClient: React.FC<CheckoutClientProps> = ({ currentUser }) => {
                     Contact information
                   </h2>
                   <CheckoutInput
+                    disabled={isLoading}
                     id="name"
                     label="Name"
                     type="text"
@@ -232,6 +235,7 @@ const CheckoutClient: React.FC<CheckoutClientProps> = ({ currentUser }) => {
                   />
 
                   <CheckoutInput
+                    disabled={isLoading}
                     id="phoneNumber"
                     label="Phone Number"
                     type="text"
@@ -254,6 +258,7 @@ const CheckoutClient: React.FC<CheckoutClientProps> = ({ currentUser }) => {
 
                   <div className="mt-6 grid grid-cols-3 sm:grid-cols-4 gap-y-6 gap-x-4">
                     <CheckoutInput
+                      disabled={isLoading}
                       id="cardNumber"
                       label="Card Number (numbers only)"
                       type="text"
@@ -265,6 +270,7 @@ const CheckoutClient: React.FC<CheckoutClientProps> = ({ currentUser }) => {
                     />
 
                     <CheckoutInput
+                      disabled={isLoading}
                       id="exporationDate"
                       label="Expiration date (MM/YY)"
                       type="text"
@@ -277,6 +283,7 @@ const CheckoutClient: React.FC<CheckoutClientProps> = ({ currentUser }) => {
                     />
 
                     <CheckoutInput
+                      disabled={isLoading}
                       id="cvc"
                       label="CVC"
                       type="text"
@@ -299,6 +306,7 @@ const CheckoutClient: React.FC<CheckoutClientProps> = ({ currentUser }) => {
 
                   <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-3">
                     <CheckoutInput
+                      disabled={isLoading}
                       id="address"
                       label="Address"
                       type="text"
@@ -311,6 +319,7 @@ const CheckoutClient: React.FC<CheckoutClientProps> = ({ currentUser }) => {
                     />
 
                     <CheckoutInput
+                      disabled={isLoading}
                       id="city"
                       label="City"
                       type="text"
@@ -322,6 +331,7 @@ const CheckoutClient: React.FC<CheckoutClientProps> = ({ currentUser }) => {
                     />
 
                     <CheckoutInput
+                      disabled={isLoading}
                       id="state"
                       label="State / Province"
                       type="text"
@@ -333,6 +343,7 @@ const CheckoutClient: React.FC<CheckoutClientProps> = ({ currentUser }) => {
                     />
 
                     <CheckoutInput
+                      disabled={isLoading}
                       id="postalCode"
                       label="Postal code"
                       type="text"
@@ -352,6 +363,7 @@ const CheckoutClient: React.FC<CheckoutClientProps> = ({ currentUser }) => {
                   >
                     Pay Now
                   </button>
+
                   <p className="mt-4 text-center text-sm text-gray-500 sm:mt-0 sm:text-left">
                     Please complete the payment
                   </p>
