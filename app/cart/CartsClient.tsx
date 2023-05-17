@@ -17,10 +17,9 @@ interface CartsClientProps {
 const CartsClient: React.FC<CartsClientProps> = ({ currentUser }) => {
   const router = useRouter()
   const { cartItems, removeItem } = useCartItem()
-  const [renderItems, setRenderItems] = useState(cartItems)
 
   const totalPrice = useMemo(
-    () => renderItems.reduce((acc, curr) => acc + curr.price, 0),
+    () => cartItems.reduce((acc, curr) => acc + curr.price, 0),
     [cartItems]
   )
 
@@ -28,10 +27,6 @@ const CartsClient: React.FC<CartsClientProps> = ({ currentUser }) => {
     removeItem(idx)
     toast.success('삭제 완료')
   }
-
-  useEffect(() => {
-    setRenderItems(cartItems)
-  }, [cartItems])
 
   return (
     <Container>
@@ -43,7 +38,7 @@ const CartsClient: React.FC<CartsClientProps> = ({ currentUser }) => {
             <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
               Shopping Cart
             </h1>
-            <form className="mt-12 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
+            <div className="mt-12 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
               <section aria-labelledby="cart-heading" className="lg:col-span-7">
                 <h2 id="cart-heading" className="sr-only">
                   Items in your shopping cart
@@ -53,11 +48,11 @@ const CartsClient: React.FC<CartsClientProps> = ({ currentUser }) => {
                   role="list"
                   className="border-t border-b border-gray-200 divide-y divide-gray-200"
                 >
-                  {renderItems.map((cart, Idx) => (
+                  {cartItems.map((cart, Idx) => (
                     <li key={Idx} className="flex py-6 sm:py-10">
                       <div className="flex-shrink-0">
                         <div
-                          className="w-24 h-24 sm:w-48 sm:h-48"
+                          className="w-24 h-24 sm:w-48 sm:h-48 cursor-pointer"
                           onClick={() => router.push(`/products/${cart.id}`)}
                         >
                           <Image
@@ -169,14 +164,14 @@ const CartsClient: React.FC<CartsClientProps> = ({ currentUser }) => {
 
                 <div className="mt-6">
                   <button
-                    type="submit"
+                    onClick={() => router.push('/checkout')}
                     className="w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
                   >
                     Checkout
                   </button>
                 </div>
               </section>
-            </form>
+            </div>
           </div>
         </div>
       )}

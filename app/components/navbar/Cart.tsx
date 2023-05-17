@@ -8,7 +8,7 @@ const Cart = () => {
   const router = useRouter()
   const { cartItems } = useCartItem()
   return (
-    <div className="ml-4 flow-root lg:ml-6">
+    <div className="ml-4 flow-root lg:ml-6 cursor-pointer">
       <div
         onClick={() => router.push('/cart')}
         className="group -m-2 flex items-center p-2"
