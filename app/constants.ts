@@ -15,3 +15,5 @@ export const DEFAULT_DETAILS = [
 ]
 
 export const LIMIT_CART_SIZE = 5
+
+export const TEST_CARD_NUMNER = '4242424242424242'
