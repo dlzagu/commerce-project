@@ -262,7 +262,18 @@ const CheckoutClient: React.FC<CheckoutClientProps> = ({ currentUser }) => {
                       id="cardNumber"
                       label="Card Number (numbers only)"
                       type="text"
+                      message="TEST CARD NUMBER : 4242424242424242"
                       register={register}
+                      validation={{
+                        minLength: {
+                          value: 16,
+                          message: 'Card number must be 16 digits',
+                        },
+                        maxLength: {
+                          value: 16,
+                          message: 'Card number must be 16 digits',
+                        },
+                      }}
                       errors={errors}
                       required
                       grid="col-span-3 sm:col-span-4"

@@ -1,5 +1,9 @@
-import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form'
-import { BiWon } from 'react-icons/bi'
+import {
+  FieldErrors,
+  FieldValues,
+  UseFormRegister,
+  RegisterOptions,
+} from 'react-hook-form'
 
 interface InputProps {
   id: string
@@ -8,7 +12,9 @@ interface InputProps {
   disabled?: boolean
   grid?: string
   htmlFor?: string
+  message?: string
   required?: boolean
+  validation?: RegisterOptions
   register: UseFormRegister<FieldValues>
   errors: FieldErrors
   autoComplete?: string
@@ -21,9 +27,11 @@ const CheckoutInput: React.FC<InputProps> = ({
   disabled,
   htmlFor,
   register,
+  validation = {}, //default
   required,
   grid,
   errors,
+  message,
   autoComplete,
 }) => {
   return (
@@ -41,7 +49,7 @@ const CheckoutInput: React.FC<InputProps> = ({
         <input
           id={id}
           disabled={disabled}
-          {...register(id, { required })}
+          {...register(id, { required, ...validation })}
           placeholder=" "
           autoComplete={autoComplete}
           type={type}
@@ -57,6 +65,12 @@ const CheckoutInput: React.FC<InputProps> = ({
           ${errors[id] ? 'focus:border-rose-500' : 'focus:border-black'}
         `}
         />
+        {message && (
+          <p className="text-sm text-rose-500 mb-1 mt-1">{message}</p>
+        )}
+        {errors[id] && (
+          <p className="text-sm text-rose-500">{String(errors[id]?.message)}</p>
+        )}
       </div>
     </div>
   )
