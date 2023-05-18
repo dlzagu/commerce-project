@@ -25,8 +25,10 @@ export async function POST(request: Request) {
         createMany: {
           data: items.map((item: any) => ({
             productId: item.id,
+            name: item.name,
             size: item.size,
             price: item.price,
+            image: item.image,
           })),
         },
       },
