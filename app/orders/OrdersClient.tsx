@@ -2,15 +2,15 @@
 
 import Container from '../components/Container'
 import { SafeOrder, SafeUser } from '../types'
-import OrerHistoryInfo from '../components/oder/OrderHistoryInfo'
+import OrerHistoryInfo from '../components/order/OrderHistoryInfo'
 
 /* This example requires Tailwind CSS v2.0+ */
 
 interface OrdersClientProps {
-  orderss: SafeOrder[]
+  orders: SafeOrder[]
   currentUser?: SafeUser | null
 }
-const OrdersClient: React.FC<OrdersClientProps> = ({ orderss }) => {
+const OrdersClient: React.FC<OrdersClientProps> = ({ orders }) => {
   return (
     <Container>
       <div className="bg-white">
@@ -29,7 +29,7 @@ const OrdersClient: React.FC<OrdersClientProps> = ({ orderss }) => {
             <h2 className="sr-only">Recent orders</h2>
 
             <div className="space-y-20">
-              {orderss.map((order) => (
+              {orders.map((order) => (
                 <OrerHistoryInfo order={order} />
               ))}
             </div>

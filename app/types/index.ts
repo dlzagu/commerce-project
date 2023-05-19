@@ -1,4 +1,4 @@
-import { User, Product } from '@prisma/client'
+import { User, Product, Order } from '@prisma/client'
 
 export type SafeUser = Omit<
   User,
@@ -10,6 +10,11 @@ export type SafeUser = Omit<
 }
 
 export type SafeProduct = Omit<Product, 'createdAt' | 'updatedAt'> & {
+  createdAt: string
+  updatedAt?: string
+}
+
+export type SafeOrder = Omit<Order, 'createdAt' | 'updatedAt'> & {
   createdAt: string
   updatedAt?: string
 }

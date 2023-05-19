@@ -2,7 +2,7 @@ import prisma from '@/app/libs/prismadb'
 
 import getCurrentUser from './getCurrentUser'
 
-export default async function getOders() {
+export default async function getOrders() {
   try {
     const currentUser = await getCurrentUser()
 
@@ -14,12 +14,15 @@ export default async function getOders() {
       where: {
         userId: currentUser.id,
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     })
 
-    const safeOrders = orders.map((favorite) => ({
-      ...favorite,
-      createdAt: favorite.createdAt.toString(),
-      updatedAt: favorite.updatedAt?.toISOString(),
+    const safeOrders = orders.map((oder) => ({
+      ...oder,
+      createdAt: oder.createdAt.toString(),
+      updatedAt: oder.updatedAt?.toISOString(),
     }))
 
     return safeOrders
