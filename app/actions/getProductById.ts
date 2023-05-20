@@ -9,9 +9,6 @@ export default async function getProductsById(params: IParams) {
     const { productId } = params
     const product = await prisma.product.findFirst({
       where: { id: productId },
-      orderBy: {
-        createdAt: 'desc',
-      },
     })
     if (!product) {
       return null
