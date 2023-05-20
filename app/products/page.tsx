@@ -2,7 +2,8 @@ import getCurrentUser from '@/app/actions/getCurrentUser'
 import getProductById from '@/app/actions/getProductById'
 import ClientOnly from '@/app/components/ClientOnly'
 import EmptyState from '@/app/components/EmptyState'
-import ProductClient from './ProductClient'
+import ProductsClient from './ProductsClient'
+import getCategories from '../actions/getCategories'
 
 interface IParams {
   productId?: string
@@ -10,6 +11,7 @@ interface IParams {
 
 const ProductPage = async ({ params }: { params: IParams }) => {
   const product = await getProductById(params)
+  const categories = await getCategories()
   const currentUser = await getCurrentUser()
 
   if (!product) {
@@ -22,7 +24,7 @@ const ProductPage = async ({ params }: { params: IParams }) => {
 
   return (
     <ClientOnly>
-      <ProductClient product={product} currentUser={currentUser} />
+      <ProductsClient categories={categories} />
     </ClientOnly>
   )
 }
