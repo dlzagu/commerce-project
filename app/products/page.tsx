@@ -1,20 +1,19 @@
 import getCurrentUser from '@/app/actions/getCurrentUser'
-import getProductById from '@/app/actions/getProductById'
 import ClientOnly from '@/app/components/ClientOnly'
 import EmptyState from '@/app/components/EmptyState'
 import ProductsClient from './ProductsClient'
 import getCategories from '../actions/getCategories'
+import getProducts, { IProductsParams } from '../actions/getProuctsCopy'
 
 interface IParams {
-  productId?: string
+  searchParams: IProductsParams
 }
 
-const ProductPage = async ({ params }: { params: IParams }) => {
-  const product = await getProductById(params)
+const ProductsPage = async ({ searchParams }: IParams) => {
+  const products = await getProducts(searchParams)
   const categories = await getCategories()
-  const currentUser = await getCurrentUser()
 
-  if (!product) {
+  if (!products) {
     return (
       <ClientOnly>
         <EmptyState />
@@ -24,9 +23,9 @@ const ProductPage = async ({ params }: { params: IParams }) => {
 
   return (
     <ClientOnly>
-      <ProductsClient categories={categories} />
+      <ProductsClient categories={categories} products={products} />
     </ClientOnly>
   )
 }
 
-export default ProductPage
+export default ProductsPage

@@ -15,32 +15,24 @@ import {
 } from '@headlessui/react'
 import { HiX, HiChevronDown } from 'react-icons/hi'
 import { Category } from '@prisma/client'
-import { DEFAULT_SIZES } from '../constants'
-import { FieldValues, useForm } from 'react-hook-form'
-
-const sortOptions = [
-  { name: 'price high', href: '#', current: true },
-  { name: 'price low', href: '#', current: false },
-  { name: 'new', href: '#', current: false },
-]
+import { DEFAULT_SIZES, sortOptions } from '../constants'
+import ProductCard from '../components/products/ProductCard'
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
 }
 interface ProductsClientProps {
   products?: SafeProduct[]
-  currentUser?: SafeUser | null
   categories: Category[]
 }
 
 const ProductsClient: React.FC<ProductsClientProps> = ({
   products,
-  currentUser,
   categories,
 }) => {
   const router = useRouter()
   const params = useSearchParams()
-  const category = categories.map((a) => a.name)
+  const categoriesValue = categories.map((category) => category.name)
   const [open, setOpen] = useState(false)
 
   const parseQuery = (queryKey: string) => {
@@ -64,6 +56,11 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
   const [selectedSizes, setSelectedSizes] = useState<(string | null)[]>(
     parseQuery('sizes')
   )
+  const [selectedSort, setSelectedSort] = useState(
+    parseQuery('sort').join('').length == 0
+      ? 'new'
+      : parseQuery('sort').join('')
+  )
   const [activeFilters, setActiveFilters] = useState<(string | null)[]>([
     ...parseQuery('category'),
     ...parseQuery('sizes'),
@@ -73,18 +70,18 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
     values.map((value) => ({
       value,
       label: value[0].toUpperCase() + value.slice(1),
-      checked: false,
+      id: false,
     }))
 
   const filters = [
     {
       id: 'category',
-      name: 'Category',
-      options: makeOptions(category),
+      name: 'category',
+      options: makeOptions(categoriesValue),
     },
     {
       id: 'sizes',
-      name: 'Sizes',
+      name: 'sizes',
       options: makeOptions(DEFAULT_SIZES),
     },
   ]
@@ -94,6 +91,7 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
       let currentQuery = {}
       let updatedCategories = [...selectedCategories]
       let updatedSizes = [...selectedSizes]
+      let updatedSort = selectedSort
       if (id == 'category' || id == 'sizes') {
         if (activeFilters.includes(value)) {
           setActiveFilters(activeFilters.filter((filter) => filter !== value))
@@ -121,6 +119,10 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
         }
         setSelectedSizes(updatedSizes)
       }
+      if (id == 'sort') {
+        updatedSort = value
+        setSelectedSort(value)
+      }
 
       if (params) {
         currentQuery = qs.parse(params.toString())
@@ -130,6 +132,7 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
         ...currentQuery,
         category: updatedCategories,
         sizes: updatedSizes,
+        sort: updatedSort,
       }
 
       // Update the URL with the correct format
@@ -319,10 +322,10 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
                       {sortOptions.map((option) => (
                         <Menu.Item key={option.name}>
                           {({ active }) => (
-                            <a
-                              href={option.href}
+                            <div
+                              onClick={() => handleClick(option.id, 'sort')}
                               className={classNames(
-                                option.current
+                                selectedSort == option.id
                                   ? 'font-medium text-gray-900'
                                   : 'text-gray-500',
                                 active ? 'bg-gray-100' : '',
@@ -330,7 +333,7 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
                               )}
                             >
                               {option.name}
-                            </a>
+                            </div>
                           )}
                         </Menu.Item>
                       ))}
@@ -359,7 +362,7 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
                           <span>{section.name}</span>
                           {sectionIdx === 0 ? (
                             <span className="ml-1.5 rounded py-0.5 px-1.5 bg-gray-200 text-xs font-semibold text-gray-700 tabular-nums">
-                              1
+                              {selectedCategories.length}
                             </span>
                           ) : null}
                           <HiChevronDown
@@ -466,6 +469,11 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
             </div>
           </div>
         </section>
+      </div>
+      <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 md:gap-y-0 lg:gap-x-8">
+        {products?.map((product) => (
+          <ProductCard key={product.id} data={product} />
+        ))}
       </div>
     </Container>
   )
