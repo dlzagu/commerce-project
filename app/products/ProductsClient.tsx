@@ -2,6 +2,7 @@
 
 import { Fragment, useCallback, useEffect, useState } from 'react'
 
+import { useForm } from 'react-hook-form'
 import { useSearchParams, useRouter } from 'next/navigation'
 import qs from 'query-string'
 import Container from '@/app/components/Container'
@@ -34,7 +35,6 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
   const params = useSearchParams()
   const categoriesValue = categories.map((category) => category.name)
   const [open, setOpen] = useState(false)
-
   const parseQuery = (queryKey: string) => {
     if (params) {
       const parsedParams = qs.parse(params.toString(), {
@@ -50,18 +50,26 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
     } else return []
   }
 
-  const [selectedCategories, setSelectedCategories] = useState<
-    (string | null)[]
-  >(parseQuery('category'))
-  const [selectedSizes, setSelectedSizes] = useState<(string | null)[]>(
-    parseQuery('sizes')
-  )
-  const [selectedSort, setSelectedSort] = useState(
+  const initialCategories = parseQuery('category')
+  const initialSizes = parseQuery('sizes')
+  const initialSort =
     parseQuery('sort').join('').length == 0
       ? 'new'
       : parseQuery('sort').join('')
-  )
-  const [activeFilters, setActiveFilters] = useState<(string | null)[]>([
+
+  const { register, watch, setValue } = useForm({
+    defaultValues: {
+      category: initialCategories || [],
+      sizes: initialSizes || [],
+      sort: initialSort,
+    },
+  })
+
+  const watchCategory = watch('category')
+  const watchSizes = watch('sizes')
+  const watchSort = watch('sort')
+
+  const [activeFilters, setActiveFilters] = useState([
     ...parseQuery('category'),
     ...parseQuery('sizes'),
   ])
@@ -86,86 +94,41 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
     },
   ]
 
-  const handleClick = useCallback(
-    (value: string, id: string) => {
-      let currentQuery = {}
-      let updatedCategories = [...selectedCategories]
-      let updatedSizes = [...selectedSizes]
-      let updatedSort = selectedSort
-      if (id == 'category' || id == 'sizes') {
-        if (activeFilters.includes(value)) {
-          setActiveFilters(activeFilters.filter((filter) => filter !== value))
-        } else {
-          setActiveFilters([...activeFilters, value])
-        }
-      }
-
-      if (id == 'category') {
-        if (selectedCategories.includes(value)) {
-          updatedCategories = selectedCategories.filter(
-            (category) => category !== value
-          )
-        } else {
-          updatedCategories = [...selectedCategories, value]
-        }
-        setSelectedCategories(updatedCategories)
-      }
-
-      if (id == 'sizes') {
-        if (selectedSizes.includes(value)) {
-          updatedSizes = selectedSizes.filter((category) => category !== value)
-        } else {
-          updatedSizes = [...selectedSizes, value]
-        }
-        setSelectedSizes(updatedSizes)
-      }
-      if (id == 'sort') {
-        updatedSort = value
-        setSelectedSort(value)
-      }
-
-      if (params) {
-        currentQuery = qs.parse(params.toString())
-      }
-
-      const updatedQuery: any = {
-        ...currentQuery,
-        category: updatedCategories,
-        sizes: updatedSizes,
-        sort: updatedSort,
-      }
-
-      // Update the URL with the correct format
-      const url = qs.stringifyUrl(
-        {
-          url: '/products/',
-          query: updatedQuery,
-        },
-        { skipNull: true, arrayFormat: 'comma' } // Add the arrayFormat option
-      )
-      console.log(url)
-      router.push(url)
-    },
-    [router, params, selectedCategories, selectedSizes, activeFilters]
-  )
-
   const removeFilter = (value: string) => {
-    setActiveFilters(activeFilters.filter((filter) => filter !== value))
-
-    if (selectedCategories.includes(value)) {
-      handleClick(value, 'category')
+    let updatedActiveFilters = [...activeFilters].filter(
+      (filter) => filter != value
+    )
+    setActiveFilters(updatedActiveFilters)
+    if (watchCategory.includes(value)) {
+      let updatedCategory = [...watchCategory].filter(
+        (category) => category != value
+      )
+      setValue('category', updatedCategory)
     } else {
-      handleClick(value, 'sizes')
+      let updatedSizes = [...watchSizes].filter((size) => size != value)
+      setValue('sizes', updatedSizes)
     }
   }
 
-  const isSelected = (sectionId: string, optionValue: string) => {
-    if (sectionId === 'category') {
-      return selectedCategories.includes(optionValue)
-    } else {
-      return selectedSizes.includes(optionValue)
+  useEffect(() => {
+    console.log(watchCategory, watchSizes)
+    const updatedQuery: any = {
+      category: watchCategory,
+      sizes: watchSizes,
+      sort: watchSort,
     }
-  }
+    setActiveFilters([...watchCategory, ...watchSizes])
+
+    const url = qs.stringifyUrl(
+      {
+        url: '/products/',
+        query: updatedQuery,
+      },
+      { skipNull: true, arrayFormat: 'comma' }
+    )
+
+    router.push(url)
+  }, [watchCategory, watchSizes, watchSort])
 
   return (
     <Container>
@@ -239,33 +202,39 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
                           </h3>
                           <Disclosure.Panel className="pt-6">
                             <div className="space-y-6">
-                              {section.options.map((option, optionIdx) => (
-                                <div
-                                  key={option.value}
-                                  className="flex items-center"
-                                >
-                                  <input
-                                    id={`filter-mobile-${section.id}-${optionIdx}`}
-                                    name={`${section.id}[]`}
-                                    defaultValue={option.value}
-                                    type="checkbox"
-                                    onClick={() =>
-                                      handleClick(option.value, section.id)
-                                    }
-                                    defaultChecked={isSelected(
-                                      section.id,
-                                      option.value
-                                    )}
-                                    className="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
-                                  />
-                                  <label
-                                    htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
-                                    className="ml-3 text-sm text-gray-500"
+                              {section.options.map((option, optionIdx) => {
+                                const optionValue = option.value
+                                let isChecked = false
+
+                                if (section.id === 'category') {
+                                  isChecked =
+                                    watchCategory.includes(optionValue)
+                                } else if (section.id === 'sizes') {
+                                  isChecked = watchSizes.includes(optionValue)
+                                }
+
+                                return (
+                                  <div
+                                    key={option.value}
+                                    className="flex items-center"
                                   >
-                                    {option.label}
-                                  </label>
-                                </div>
-                              ))}
+                                    <input
+                                      {...register(`${section.id}` as any)}
+                                      id={section.id}
+                                      value={option.value}
+                                      type="checkbox"
+                                      checked={isChecked}
+                                      className="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
+                                    />
+                                    <label
+                                      htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
+                                      className="ml-3 text-sm text-gray-500"
+                                    >
+                                      {option.label}
+                                    </label>
+                                  </div>
+                                )
+                              })}
                             </div>
                           </Disclosure.Panel>
                         </>
@@ -323,9 +292,11 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
                         <Menu.Item key={option.name}>
                           {({ active }) => (
                             <div
-                              onClick={() => handleClick(option.id, 'sort')}
+                              onClick={() => {
+                                setValue('sort', option.id) // 클릭 이벤트에서 setValue를 사용하여 sort 상태 업데이트
+                              }}
                               className={classNames(
-                                selectedSort == option.id
+                                watchSort == option.id
                                   ? 'font-medium text-gray-900'
                                   : 'text-gray-500',
                                 active ? 'bg-gray-100' : '',
@@ -362,7 +333,7 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
                           <span>{section.name}</span>
                           {sectionIdx === 0 ? (
                             <span className="ml-1.5 rounded py-0.5 px-1.5 bg-gray-200 text-xs font-semibold text-gray-700 tabular-nums">
-                              {selectedCategories.length}
+                              {watchCategory.length}
                             </span>
                           ) : null}
                           <HiChevronDown
@@ -382,33 +353,38 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
                         >
                           <Popover.Panel className="origin-top-right absolute right-0 mt-2 bg-white rounded-md shadow-2xl p-4 ring-1 ring-black ring-opacity-5 focus:outline-none">
                             <form className="space-y-4">
-                              {section.options.map((option, optionIdx) => (
-                                <div
-                                  key={option.value}
-                                  className="flex items-center"
-                                >
-                                  <input
-                                    id={`filter-${section.id}-${optionIdx}`}
-                                    name={`${section.id}[]`}
-                                    defaultValue={option.value}
-                                    type="checkbox"
-                                    onClick={() =>
-                                      handleClick(option.value, section.id)
-                                    }
-                                    defaultChecked={isSelected(
-                                      section.id,
-                                      option.value
-                                    )}
-                                    className="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
-                                  />
-                                  <label
-                                    htmlFor={`filter-${section.id}-${optionIdx}`}
-                                    className="ml-3 pr-6 text-sm font-medium text-gray-900 whitespace-nowrap"
+                              {section.options.map((option, optionIdx) => {
+                                const optionValue = option.value
+                                let isChecked = false
+
+                                if (section.id === 'category') {
+                                  isChecked =
+                                    watchCategory.includes(optionValue)
+                                } else if (section.id === 'sizes') {
+                                  isChecked = watchSizes.includes(optionValue)
+                                }
+                                return (
+                                  <div
+                                    key={option.value}
+                                    className="flex items-center"
                                   >
-                                    {option.label}
-                                  </label>
-                                </div>
-                              ))}
+                                    <input
+                                      {...register(`${section.id}` as any)}
+                                      id={section.id}
+                                      value={option.value}
+                                      type="checkbox"
+                                      checked={isChecked}
+                                      className="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
+                                    />
+                                    <label
+                                      htmlFor={`filter-${section.id}-${optionIdx}`}
+                                      className="ml-3 pr-6 text-sm font-medium text-gray-900 whitespace-nowrap"
+                                    >
+                                      {option.label}
+                                    </label>
+                                  </div>
+                                )
+                              })}
                             </form>
                           </Popover.Panel>
                         </Transition>
