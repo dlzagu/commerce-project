@@ -74,23 +74,16 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
     ...parseQuery('sizes'),
   ])
 
-  const makeOptions = (values: string[]) =>
-    values.map((value) => ({
-      value,
-      label: value[0].toUpperCase() + value.slice(1),
-      id: false,
-    }))
-
   const filters = [
     {
       id: 'category',
       name: 'category',
-      options: makeOptions(categoriesValue),
+      options: categoriesValue,
     },
     {
       id: 'sizes',
       name: 'sizes',
-      options: makeOptions(DEFAULT_SIZES),
+      options: DEFAULT_SIZES,
     },
   ]
 
@@ -202,8 +195,8 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
                           </h3>
                           <Disclosure.Panel className="pt-6">
                             <div className="space-y-6">
-                              {section.options.map((option, optionIdx) => {
-                                const optionValue = option.value
+                              {section.options.map((value) => {
+                                const optionValue = value
                                 let isChecked = false
 
                                 if (section.id === 'category') {
@@ -215,22 +208,19 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
 
                                 return (
                                   <div
-                                    key={option.value}
+                                    key={value}
                                     className="flex items-center"
                                   >
                                     <input
                                       {...register(`${section.id}` as any)}
                                       id={section.id}
-                                      value={option.value}
+                                      value={value}
                                       type="checkbox"
                                       checked={isChecked}
                                       className="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
                                     />
-                                    <label
-                                      htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
-                                      className="ml-3 text-sm text-gray-500"
-                                    >
-                                      {option.label}
+                                    <label className="ml-3 text-sm text-gray-500">
+                                      {value}
                                     </label>
                                   </div>
                                 )
@@ -353,8 +343,8 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
                         >
                           <Popover.Panel className="origin-top-right absolute right-0 mt-2 bg-white rounded-md shadow-2xl p-4 ring-1 ring-black ring-opacity-5 focus:outline-none">
                             <form className="space-y-4">
-                              {section.options.map((option, optionIdx) => {
-                                const optionValue = option.value
+                              {section.options.map((value) => {
+                                const optionValue = value
                                 let isChecked = false
 
                                 if (section.id === 'category') {
@@ -365,22 +355,19 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
                                 }
                                 return (
                                   <div
-                                    key={option.value}
+                                    key={value}
                                     className="flex items-center"
                                   >
                                     <input
                                       {...register(`${section.id}` as any)}
                                       id={section.id}
-                                      value={option.value}
+                                      value={value}
                                       type="checkbox"
                                       checked={isChecked}
                                       className="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
                                     />
-                                    <label
-                                      htmlFor={`filter-${section.id}-${optionIdx}`}
-                                      className="ml-3 pr-6 text-sm font-medium text-gray-900 whitespace-nowrap"
-                                    >
-                                      {option.label}
+                                    <label className="ml-3 pr-6 text-sm font-medium text-gray-900 whitespace-nowrap">
+                                      {value}
                                     </label>
                                   </div>
                                 )
