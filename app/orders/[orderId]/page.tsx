@@ -10,15 +10,17 @@ interface IParams {
 }
 const OrderPage = async ({ params }: { params: IParams }) => {
   const currentUser = await getCurrentUser()
-  const orderItems = await getOrderItemsById(params)
   const order = await getOrderById(params)
+  if (!order) {
+    return <EmptyState title="Unauthorized" subtitle="Not Order" />
+  }
 
   if (!currentUser) {
     return <EmptyState title="Unauthorized" subtitle="Please login" />
   }
   return (
     <ClientOnly>
-      <OrderClient orderItems={orderItems} order={order} />
+      <OrderClient order={order} orderItems={order.orderItems} />
     </ClientOnly>
   )
 }

@@ -2,24 +2,19 @@
 
 import { OrderItem } from '@prisma/client'
 import Container from '../../components/Container'
-import { useRouter } from 'next/navigation'
+
 import { SafeOrder } from '@/app/types'
 import { getDateCompare } from '@/app/helpers/date'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import OrderItemCard from '@/app/components/order/OrderItemCard'
 import OrderItemBilling from '@/app/components/order/OrderItemsBilling'
 
-function classNames(...classes: any) {
-  return classes.filter(Boolean).join(' ')
-}
 interface OrderClientProps {
   orderItems: OrderItem[]
   order: SafeOrder | null
 }
 
 const OrderClient: React.FC<OrderClientProps> = ({ orderItems, order }) => {
-  const router = useRouter()
-
   const totalPrice = useMemo(
     () => orderItems.reduce((acc, curr) => acc + curr.price, 0),
     [orderItems]
@@ -44,7 +39,7 @@ const OrderClient: React.FC<OrderClientProps> = ({ orderItems, order }) => {
           <div className="mt-6">
             <div className="space-y-8">
               {orderItems?.map((item) => (
-                <OrderItemCard orderItem={item} order={order} />
+                <OrderItemCard orderItem={item} order={order} key={item.id} />
               ))}
             </div>
           </div>

@@ -2,34 +2,21 @@ import { OrderItem } from '@prisma/client'
 import { useEffect, useMemo, useState } from 'react'
 import { getDateCompare } from '@/app/helpers/date'
 import { SafeOrder } from '@/app/types'
-import axios from 'axios'
-import { toast } from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 import OrderHistoryItemInfo from './OrderHistoryItemInfo'
 
 interface OrerHistoryInfoProps {
   order: SafeOrder
+  orderItems: OrderItem[]
 }
 
-const OrerHistoryInfo = ({ order }: OrerHistoryInfoProps) => {
-  const [orderItems, setOrderItems] = useState<OrderItem[]>([])
+const OrerHistoryInfo = ({ order, orderItems }: OrerHistoryInfoProps) => {
   const router = useRouter()
 
   const totalPrice = useMemo(
     () => orderItems.reduce((acc, cur) => acc + cur.price, 0),
     [orderItems]
   )
-
-  useEffect(() => {
-    axios
-      .get(`/api/order/${order.id}`)
-      .then((res) => {
-        setOrderItems(res.data)
-      })
-      .catch((error) => {
-        toast.error(error?.response?.data?.error)
-      })
-  }, [])
 
   return (
     <div key={order.id}>
@@ -85,7 +72,7 @@ const OrerHistoryInfo = ({ order }: OrerHistoryInfoProps) => {
         </thead>
         <tbody className="border-b border-gray-200 divide-y divide-gray-200 text-sm sm:border-t">
           {orderItems?.map((item: OrderItem) => (
-            <OrderHistoryItemInfo orderItem={item} />
+            <OrderHistoryItemInfo orderItem={item} key={item.id} />
           ))}
         </tbody>
       </table>

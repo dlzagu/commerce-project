@@ -4,8 +4,6 @@ import Container from '../components/Container'
 import { SafeOrder, SafeUser } from '../types'
 import OrerHistoryInfo from '../components/order/OrderHistoryInfo'
 
-/* This example requires Tailwind CSS v2.0+ */
-
 interface OrdersClientProps {
   orders: SafeOrder[]
   currentUser?: SafeUser | null
@@ -30,7 +28,11 @@ const OrdersClient: React.FC<OrdersClientProps> = ({ orders }) => {
 
             <div className="space-y-20">
               {orders.map((order) => (
-                <OrerHistoryInfo order={order} />
+                <OrerHistoryInfo
+                  order={order}
+                  orderItems={order.orderItems}
+                  key={order.id}
+                />
               ))}
             </div>
           </div>

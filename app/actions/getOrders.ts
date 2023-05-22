@@ -10,6 +10,7 @@ export default async function getOrders() {
       return []
     }
 
+    // Order와 OrderItem을 함께 가져와라
     const orders = await prisma.order.findMany({
       where: {
         userId: currentUser.id,
@@ -17,12 +18,15 @@ export default async function getOrders() {
       orderBy: {
         createdAt: 'desc',
       },
+      include: {
+        orderItems: true,
+      },
     })
 
-    const safeOrders = orders.map((oder) => ({
-      ...oder,
-      createdAt: oder.createdAt.toString(),
-      updatedAt: oder.updatedAt?.toISOString(),
+    const safeOrders = orders.map((order) => ({
+      ...order,
+      createdAt: order.createdAt.toString(),
+      updatedAt: order.updatedAt?.toISOString(),
     }))
 
     return safeOrders

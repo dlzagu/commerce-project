@@ -9,6 +9,9 @@ export default async function getOrderById(params: IParams) {
     const { orderId } = params
     const order = await prisma.order.findFirst({
       where: { id: orderId },
+      include: {
+        orderItems: true,
+      },
     })
 
     if (!order) {

@@ -56,14 +56,16 @@ const OrderItemBilling = ({ totalPrice, order }: OrderItemBillingProps) => {
           </div>
           <div className="py-4 flex items-center justify-between">
             <dt className="text-gray-600">Shipping</dt>
-            <dd className="font-medium text-gray-900">3000 won</dd>
+            <dd className="font-medium text-gray-900">
+              {totalPrice >= 7000 ? 0 : 3000} won
+            </dd>
           </div>
 
           <div className="pt-4 flex items-center justify-between">
             <dt className="font-medium text-gray-900">Order total</dt>
             <dd className="font-medium text-indigo-600">
               {' '}
-              {totalPrice + 3000} won
+              {totalPrice >= 70000 ? totalPrice : totalPrice + 3000} won
             </dd>
           </div>
         </dl>
