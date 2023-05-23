@@ -46,13 +46,15 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
 
   return (
     <div className="px-4 mt-10 sm:px-0 sm:mt-16 lg:mt-0">
-      <h1 className="text-3xl font-extrabold tracking-tight text-on-background">
+      <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight text-on-background ">
         {name}
       </h1>
 
       <div className="mt-3">
         <h2 className="sr-only">Product information</h2>
-        <p className="text-3xl text-on-background">{price} won</p>
+        <p className="text-xl sm:text-2xl md:text-3xl text-on-background">
+          {price} won
+        </p>
       </div>
 
       <div className="mt-6">
@@ -209,10 +211,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
                   <Disclosure.Panel as="div" className="pb-6 prose prose-sm">
                     <ul role="list">
                       {detail.items.map((item) => (
-                        <li
-                          key={item}
-                          className="text-on-background sm:text-sm"
-                        >
+                        <li key={item} className="text-sm text-on-background ">
                           - {item}
                         </li>
                       ))}
