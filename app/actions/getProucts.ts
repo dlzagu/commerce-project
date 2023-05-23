@@ -5,15 +5,24 @@ export interface IProductsParams {
   category?: string
   sizes?: string
   sort?: string
+  searchKeyword?: string
 }
 
 export default async function getProducts(params: IProductsParams) {
-  let { category, sizes, sort } = params
+  let { category, sizes, sort, searchKeyword } = params
 
   let where: any = {}
   const categoryArr = category?.split(',')
   const sizesArr = sizes?.split(',')
-
+  if (searchKeyword) {
+    where = {
+      ...where,
+      name: {
+        contains: searchKeyword,
+        mode: 'insensitive',
+      },
+    }
+  }
   if (category) {
     where.category = {
       name: {
