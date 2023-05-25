@@ -1,5 +1,7 @@
+'use client'
+
 import { OrderItem } from '@prisma/client'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { getDateCompare } from '@/app/helpers/date'
 import { SafeOrder } from '@/app/types'
 import { useRouter } from 'next/navigation'

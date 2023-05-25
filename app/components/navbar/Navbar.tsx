@@ -1,3 +1,5 @@
+'use client'
+
 import Logo from './Logo'
 import Container from '../Container'
 import { SafeUser } from '@/app/types'

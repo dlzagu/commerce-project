@@ -1,5 +1,4 @@
 import prisma from '@/app/libs/prismadb'
-import qs from 'query-string'
 
 export interface IProductsParams {
   category?: string

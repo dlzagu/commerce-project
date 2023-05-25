@@ -1,9 +1,7 @@
 import EmptyState from '@/app/components/EmptyState'
 import ClientOnly from '@/app/components/ClientOnly'
-
 import getCurrentUser from '@/app/actions/getCurrentUser'
 import getFavoriteProducts from '@/app/actions/getFavoriteProducts'
-
 import FavoritesClient from './FavoritesClient'
 
 const ListingPage = async () => {

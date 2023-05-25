@@ -1,7 +1,5 @@
-import React, { Fragment, useMemo, useState } from 'react'
-import { Popover, Transition } from '@headlessui/react'
-import { HiChevronUp } from 'react-icons/hi'
-import { CartItem } from '@/app/hooks/useCartItem'
+'use client'
+
 import CheckoutInput from '../inputs/CheckoutInput'
 import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form'
 

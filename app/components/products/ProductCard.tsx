@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import { useCallback, useMemo } from 'react'
 import { SafeProduct, SafeUser } from '@/app/types'
 
-import HeartButton from '../HeartButton'
 import Button from '../Button'
 
 interface ProductCardProps {

@@ -1,5 +1,5 @@
 'use client'
-import { Fragment, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import useCartItem from '../hooks/useCartItem'
 import { SafeUser } from '@/app/types'
 import useLoginModal from '../hooks/useLoginModal'

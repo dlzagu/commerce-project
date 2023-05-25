@@ -1,3 +1,5 @@
+'use client'
+
 import { FREE_FEE } from '@/app/constants'
 import { SafeOrder } from '@/app/types'
 

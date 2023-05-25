@@ -2,7 +2,6 @@ import getCurrentUser from '@/app/actions/getCurrentUser'
 import ClientOnly from '@/app/components/ClientOnly'
 import EmptyState from '@/app/components/EmptyState'
 import OrderClient from './OrderClient'
-import getOrderItemsById from '@/app/actions/getOrderItemsById'
 import getOrderById from '@/app/actions/getOrderById'
 
 interface IParams {

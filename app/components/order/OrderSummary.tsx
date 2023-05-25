@@ -1,4 +1,6 @@
-import { Fragment, useMemo, useState } from 'react'
+'use client'
+
+import { Fragment } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { HiChevronUp } from 'react-icons/hi'
 import { CartItem } from '@/app/hooks/useCartItem'

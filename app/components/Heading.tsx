@@ -1,3 +1,5 @@
+'use client'
+
 interface HeadingProps {
   title: string
   subtitle?: string

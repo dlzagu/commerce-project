@@ -2,12 +2,9 @@
 
 import { SafeProduct, SafeUser } from '@/app/types'
 import { useCallback } from 'react'
-
 import { Disclosure, RadioGroup } from '@headlessui/react'
 import { HiMinusSm, HiPlusSm } from 'react-icons/hi'
-
 import Button from '@/app/components/Button'
-
 import { DEFAULT_SIZES, DEFAULT_DETAILS } from '@/app/constants'
 import HeartButton from '@/app/components/HeartButton'
 

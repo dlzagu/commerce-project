@@ -1,7 +1,6 @@
 'use client'
 
 import { HiOutlineHeart, HiHeart } from 'react-icons/hi'
-
 import useFavorite from '@/app/hooks/useFavorite'
 import { SafeUser } from '@/app/types'
 

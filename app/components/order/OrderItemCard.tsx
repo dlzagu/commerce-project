@@ -1,3 +1,5 @@
+'use client'
+
 import { getDateCompare } from '@/app/helpers/date'
 import { SafeOrder } from '@/app/types'
 import { OrderItem } from '@prisma/client'

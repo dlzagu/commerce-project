@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useCallback, useState } from 'react'
 import qs from 'query-string'
 import { FieldValues, useForm } from 'react-hook-form'

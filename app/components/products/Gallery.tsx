@@ -1,5 +1,6 @@
-import { FunctionComponent } from 'react'
+'use client'
 
+import { FunctionComponent } from 'react'
 import { Tab } from '@headlessui/react'
 import Image from 'next/image'
 
