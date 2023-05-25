@@ -49,3 +49,5 @@ export const SORT_OPTIONS = [
 ]
 
 export const FREE_FEE = 70000
+
+export const PRODUCTS_PER_PAGE = 12

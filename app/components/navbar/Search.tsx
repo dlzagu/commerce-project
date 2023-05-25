@@ -20,10 +20,7 @@ const Search = () => {
   const watchSearch = watch('search')
 
   const onSubmit = useCallback(() => {
-    let currentQuery = {}
-
     const updatedQuery: any = {
-      ...currentQuery,
       searchKeyword: watchSearch,
     }
 

@@ -1,14 +1,19 @@
 import prisma from '@/app/libs/prismadb'
+import { PRODUCTS_PER_PAGE } from '../constants'
 
 export interface IProductsParams {
   category?: string
   sizes?: string
   sort?: string
   searchKeyword?: string
+  page?: string
 }
 
 export default async function getProducts(params: IProductsParams) {
-  let { category, sizes, sort, searchKeyword } = params
+  let { category, sizes, sort, searchKeyword, page } = params
+  let currentPage = Number(page) || 1
+
+  let skip = currentPage > 1 ? (currentPage - 1) * PRODUCTS_PER_PAGE : undefined
 
   let where: any = {}
   const categoryArr = category?.split(',')
@@ -66,6 +71,8 @@ export default async function getProducts(params: IProductsParams) {
     const products = await prisma.product.findMany({
       where,
       orderBy,
+      ...(skip && { skip }),
+      take: PRODUCTS_PER_PAGE,
     })
 
     const safeProducts = products.map((product) => ({

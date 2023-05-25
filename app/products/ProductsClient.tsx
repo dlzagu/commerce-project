@@ -7,12 +7,13 @@ import qs from 'query-string'
 import Container from '@/app/components/Container'
 import { SafeProduct } from '@/app/types'
 import { Category } from '@prisma/client'
-import { DEFAULT_SIZES } from '../constants'
+import { DEFAULT_SIZES, PRODUCTS_PER_PAGE } from '../constants'
 import ProductCard from '../components/products/ProductCard'
 import ProductFilter from '../components/products/ProductFilter'
+import PaginationButtons from '../components/PaginationButtons'
 
 interface ProductsClientProps {
-  products?: SafeProduct[]
+  products: SafeProduct[]
   categories: Category[]
 }
 
@@ -42,9 +43,7 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
   const initialCategories = parseQuery('category')
   const initialSizes = parseQuery('sizes')
   const initialSort =
-    parseQuery('sort').join('').length == 0
-      ? 'new'
-      : parseQuery('sort').join('')
+    parseQuery('sort').join('').length == 0 ? '' : parseQuery('sort').join('')
 
   const { register, watch, setValue } = useForm({
     defaultValues: {
@@ -93,11 +92,25 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
   }
 
   useEffect(() => {
-    console.log(watchCategory, watchSizes)
-    const updatedQuery: any = {
+    let currentQuery = {}
+
+    if (params) {
+      currentQuery = qs.parse(params.toString())
+    }
+
+    let updatedQuery: any = {
+      ...currentQuery,
       category: watchCategory,
       sizes: watchSizes,
-      sort: watchSort,
+      page: 1,
+    }
+
+    if (watchSort !== '') {
+      updatedQuery = {
+        ...updatedQuery,
+        sort: watchSort,
+        page: 1,
+      }
     }
     setActiveFilters([...watchCategory, ...watchSizes])
 
@@ -131,6 +144,9 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
           <ProductCard key={product.id} data={product} />
         ))}
       </div>
+      <PaginationButtons
+        disableNextPage={products.length < PRODUCTS_PER_PAGE}
+      />
     </Container>
   )
 }

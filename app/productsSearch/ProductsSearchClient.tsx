@@ -7,13 +7,14 @@ import qs from 'query-string'
 import Container from '@/app/components/Container'
 import { SafeProduct } from '@/app/types'
 import { Category } from '@prisma/client'
-import { DEFAULT_SIZES } from '../constants'
+import { DEFAULT_SIZES, PRODUCTS_PER_PAGE } from '../constants'
 import ProductCard from '../components/products/ProductCard'
 import ProductFilter from '../components/products/ProductFilter'
 import EmptyState from '../components/EmptyState'
+import PaginationButtons from '../components/PaginationButtons'
 
 interface ProductsSearchClientProps {
-  products?: SafeProduct[]
+  products: SafeProduct[]
   categories: Category[]
 }
 
@@ -100,11 +101,18 @@ const ProductsSearchClient: React.FC<ProductsSearchClientProps> = ({
   }
 
   useEffect(() => {
-    const updatedQuery: any = {
+    let updatedQuery: any = {
       category: watchCategory,
       sizes: watchSizes,
-      sort: watchSort,
       searchKeyword: watchKeyword,
+      page: 1,
+    }
+    if (watchSort !== '') {
+      updatedQuery = {
+        ...updatedQuery,
+        sort: watchSort,
+        page: 1,
+      }
     }
     setActiveFilters([...watchCategory, ...watchSizes])
 
@@ -146,6 +154,9 @@ const ProductsSearchClient: React.FC<ProductsSearchClientProps> = ({
           <ProductCard key={product.id} data={product} />
         ))}
       </div>
+      <PaginationButtons
+        disableNextPage={products.length < PRODUCTS_PER_PAGE}
+      />
     </Container>
   )
 }
