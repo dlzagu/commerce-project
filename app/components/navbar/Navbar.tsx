@@ -32,7 +32,6 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
           </div>
         </Container>
       </div>
-      {/* {isMainPage && <Categories />} */}
     </div>
   )
 }

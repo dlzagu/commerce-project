@@ -1,12 +1,9 @@
 'use client'
 
-import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import { HiOutlineHeart, HiHeart } from 'react-icons/hi'
 
 import useFavorite from '@/app/hooks/useFavorite'
 import { SafeUser } from '@/app/types'
-
-import ClientOnly from './ClientOnly'
 
 interface HeartButtonProps {
   productId: string

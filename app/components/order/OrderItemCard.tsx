@@ -1,6 +1,7 @@
 import { getDateCompare } from '@/app/helpers/date'
 import { SafeOrder } from '@/app/types'
 import { OrderItem } from '@prisma/client'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 interface OrderItemCardProps {
@@ -20,7 +21,10 @@ const OrderItemCard = ({ orderItem, order }: OrderItemCardProps) => {
       <div className="py-6 px-4 sm:px-6 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:p-8">
         <div className="sm:flex lg:col-span-7">
           <div className="flex-shrink-0 w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden sm:aspect-none sm:w-40 sm:h-40">
-            <img
+            <Image
+              width={200}
+              height={200}
+              priority
               src={orderItem.image}
               alt={orderItem.image}
               className="w-full h-full object-center object-cover sm:w-full sm:h-full"

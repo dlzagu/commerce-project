@@ -25,7 +25,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
   disabled,
   actionLabel,
   actionId = '',
-  currentUser,
   secondaryAction,
   secondaryActionLabel,
 }) => {
@@ -76,6 +75,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         >
           <Image
             fill
+            sizes="100%"
             className="
               object-cover 
               h-full 
@@ -85,12 +85,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
             "
             src={images[0]}
             alt="Product"
+            priority
           />
         </div>
 
         <h3 className="mt-4 text-sm text-gray-700">{name}</h3>
         <p className="mt-1 text-sm text-gray-500">925 silver</p>
-        <p className="mt-1 text-sm font-medium text-gray-900">{price}</p>
+        <p className="mt-1 text-sm font-medium text-gray-900">{price} won</p>
         <div className="flex flex-row items-center gap-4 w-full">
           {onAction && actionLabel && (
             <Button

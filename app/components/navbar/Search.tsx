@@ -47,7 +47,7 @@ const Search = () => {
   return (
     <div className="flex lg:ml-6">
       <div
-        className="p-2 text-gray-400 hover:text-gray-500"
+        className="p-2  text-gray-700 hover:text-gray-500"
         onClick={toggleSearchBar}
       >
         <span className="sr-only">Search</span>

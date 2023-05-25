@@ -1,4 +1,5 @@
 import { OrderItem } from '@prisma/client'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 interface OrderHistoryItemInfoProps {
@@ -11,10 +12,13 @@ const OrderHistoryItemInfo = ({ orderItem }: OrderHistoryItemInfoProps) => {
     <tr key={orderItem.id}>
       <td className="py-6 pr-8">
         <div className="flex items-center">
-          <img
+          <Image
+            width={140}
+            height={140}
+            priority
             src={orderItem.image}
             alt={orderItem.image}
-            className="w-16 h-16 object-center object-cover rounded mr-6"
+            className="object-center object-cover rounded mr-6"
           />
           <div>
             <div className="font-medium text-gray-900">{orderItem.name}</div>

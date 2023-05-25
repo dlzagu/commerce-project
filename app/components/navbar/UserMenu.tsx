@@ -1,15 +1,12 @@
 'use client'
 
 import { useCallback, useState } from 'react'
-import { AiOutlineMenu } from 'react-icons/ai'
+import { CiMenuBurger } from 'react-icons/ci'
 import { signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-
 import useLoginModal from '@/app/hooks/useLoginModal'
 import useRegisterModal from '@/app/hooks/useRegisterModal'
-
 import MenuItem from './MenuItem'
-import Avatar from '../Avatar'
 import Search from './Search'
 import Cart from './Cart'
 import { SafeUser } from '@/app/types'
@@ -36,8 +33,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
           onClick={toggleOpen}
           className="
           p-4
-          md:py-1
-          md:px-2
           border-[1px] 
           border-neutral-200 
           flex 
@@ -45,15 +40,14 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
           items-center 
           gap-3 
           rounded-full 
-          cursor-pointer 
-          hover:shadow-md 
+          cursor-pointer
+          hover:scale-110
           transition
+          sm:border-none 
+          sm:rounded-none
           "
         >
-          <AiOutlineMenu />
-          <div className="hidden md:block">
-            <Avatar src={currentUser?.image} />
-          </div>
+          <CiMenuBurger className="h-4 w-4 sm:h-6 sm:w-6" />
         </div>
         <Cart />
       </div>

@@ -66,7 +66,7 @@ const AdminClient: React.FC<AdminClientProps> = ({
   return (
     <Container>
       <Heading title="상품등록" subtitle="상품을 등록하고 수정해주세요!" />
-      <div className="flex gap-4 mt-3">
+      <div className="flex gap-4 mt-3 flex-col sm:flex-row">
         <Button
           outline
           label="카테고리 등록하기"
