@@ -42,8 +42,10 @@ export const LIMIT_CART_SIZE = 5
 
 export const TEST_CARD_NUMNER = '4242424242424242'
 
-export const sortOptions = [
+export const SORT_OPTIONS = [
   { name: 'new', id: 'new' },
   { name: 'price high', id: 'priceHigh' },
   { name: 'price low', id: 'priceLow' },
 ]
+
+export const FREE_FEE = 70000

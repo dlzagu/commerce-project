@@ -2,6 +2,8 @@ import { Fragment, useMemo, useState } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { HiChevronUp } from 'react-icons/hi'
 import { CartItem } from '@/app/hooks/useCartItem'
+import Image from 'next/image'
+import { FREE_FEE } from '@/app/constants'
 
 interface OrderSummaryProps {
   cartItems: CartItem[]
@@ -25,10 +27,13 @@ const OrderSummary = ({ cartItems, totalPrice }: OrderSummaryProps) => {
         >
           {cartItems.map((product) => (
             <li key={product.id} className="flex items-start py-6 space-x-4">
-              <img
+              <Image
+                width={80}
+                height={80}
+                priority
                 src={product.image}
                 alt={product.image}
-                className="flex-none w-20 h-20 rounded-md object-center object-cover"
+                className="flex-none rounded-md object-center object-cover"
               />
               <div className="flex-auto space-y-1">
                 <h3>{product.name}</h3>
@@ -50,13 +55,13 @@ const OrderSummary = ({ cartItems, totalPrice }: OrderSummaryProps) => {
 
           <div className="flex items-center justify-between">
             <dt className="text-gray-600">Shipping</dt>
-            <dd>{totalPrice >= 70000 ? 0 : 3000} won</dd>
+            <dd>{totalPrice >= FREE_FEE ? 0 : 3000} won</dd>
           </div>
 
           <div className="flex items-center justify-between border-t border-gray-200 pt-6">
             <dt className="text-base">Total</dt>
             <dd className="text-base">
-              {totalPrice >= 70000 ? totalPrice : totalPrice + 3000} won
+              {totalPrice >= FREE_FEE ? totalPrice : totalPrice + 3000} won
             </dd>
           </div>
         </dl>
@@ -67,7 +72,7 @@ const OrderSummary = ({ cartItems, totalPrice }: OrderSummaryProps) => {
               <Popover.Button className="w-full flex items-center py-6 font-medium">
                 <span className="text-base mr-auto">Total</span>
                 <span className="text-base mr-2">
-                  {totalPrice >= 70000 ? totalPrice : totalPrice + 3000} won
+                  {totalPrice >= FREE_FEE ? totalPrice : totalPrice + 3000} won
                 </span>
                 <HiChevronUp
                   className="w-5 h-5 text-gray-500"
@@ -109,7 +114,7 @@ const OrderSummary = ({ cartItems, totalPrice }: OrderSummaryProps) => {
 
                     <div className="flex items-center justify-between">
                       <dt className="text-gray-600">Shipping</dt>
-                      <dd>{totalPrice >= 70000 ? 0 : 3000} won</dd>
+                      <dd>{totalPrice >= FREE_FEE ? 0 : 3000} won</dd>
                     </div>
                   </dl>
                 </Popover.Panel>

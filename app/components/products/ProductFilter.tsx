@@ -10,7 +10,7 @@ import {
   Transition,
 } from '@headlessui/react'
 import { HiX, HiChevronDown } from 'react-icons/hi'
-import { sortOptions } from '@/app/constants'
+import { SORT_OPTIONS } from '@/app/constants'
 import { UseFormRegister, UseFormSetValue } from 'react-hook-form'
 
 interface ProductFilterProps {
@@ -210,7 +210,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
               >
                 <Menu.Items className="origin-top-left absolute left-0 mt-2 w-40 rounded-md shadow-2xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <div className="py-1">
-                    {sortOptions.map((option) => (
+                    {SORT_OPTIONS.map((option) => (
                       <Menu.Item key={option.name}>
                         {({ active }) => (
                           <div
