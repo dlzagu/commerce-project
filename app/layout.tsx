@@ -11,6 +11,7 @@ import ToasterProvider from './providers/ToasterProvider'
 import CategoryModal from './components/modals/CategoryAddModal'
 import getCategories from './actions/getCategories'
 import ProductAddModal from './components/modals/ProductAddModal'
+import Footer from './components/footer/Footer'
 
 export const metadata = {
   title: 'zhuro',
@@ -42,6 +43,7 @@ export default async function RootLayout({
           <Navbar currentUser={currentUser} />
         </ClientOnly>
         <div className="pb-20 pt-28">{children}</div>
+        <Footer />
       </body>
     </html>
   )
