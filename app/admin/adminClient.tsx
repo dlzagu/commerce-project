@@ -1,21 +1,25 @@
 'use client'
 
-import Heading from '@/app/components/Heading'
 import Container from '@/app/components/Container'
 import Button from '../components/Button'
 import { BiCategoryAlt } from 'react-icons/bi'
 import { SiProducthunt } from 'react-icons/si'
+import qs from 'query-string'
 import useCategoryAddModal from '../hooks/useCategoryAddModal'
 import useProductAddModal from '../hooks/useProductAddModal'
 import ProductCard from '../components/products/ProductCard'
 import { SafeProduct, SafeUser } from '../types'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import useProductEditModal from '../hooks/useProductEditModal'
 import ProductEditModal from '../components/modals/ProductEditModal'
 import { Category } from '@prisma/client'
 import axios from 'axios'
 import { toast } from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
+import SearchForm from '../components/search/SearchForm'
+import { useForm } from 'react-hook-form'
+import PaginationButtons from '../components/PaginationButtons'
+import { PRODUCTS_PER_PAGE } from '../constants'
 
 interface AdminClientProps {
   products: SafeProduct[]
@@ -23,11 +27,7 @@ interface AdminClientProps {
   categories: Category[]
 }
 
-const AdminClient: React.FC<AdminClientProps> = ({
-  currentUser,
-  products,
-  categories,
-}) => {
+const AdminClient: React.FC<AdminClientProps> = ({ products, categories }) => {
   const router = useRouter()
   const categoryModal = useCategoryAddModal()
   const productAddModal = useProductAddModal()
@@ -36,6 +36,14 @@ const AdminClient: React.FC<AdminClientProps> = ({
     null
   )
   const [deletingId, setDeletingId] = useState('')
+
+  const { register, watch } = useForm({
+    defaultValues: {
+      keyword: '',
+    },
+  })
+
+  const watchKeyword = watch('keyword')
 
   const onEdit = (productId: string) => {
     const product = products.find((p) => p.id === productId)
@@ -50,7 +58,7 @@ const AdminClient: React.FC<AdminClientProps> = ({
       axios
         .delete(`/api/products/${id}`)
         .then(() => {
-          toast.success('상품삭제 완료')
+          toast.success('Product deleted')
           router.refresh()
         })
         .catch((error) => {
@@ -63,19 +71,32 @@ const AdminClient: React.FC<AdminClientProps> = ({
     [router]
   )
 
+  useEffect(() => {
+    let updatedQuery: any = {
+      searchKeyword: watchKeyword,
+    }
+
+    const url = qs.stringifyUrl({
+      url: '/admin/',
+      query: updatedQuery,
+    })
+
+    router.push(url)
+  }, [watchKeyword])
+
   return (
     <Container>
-      <Heading title="상품등록" subtitle="상품을 등록하고 수정해주세요!" />
+      <SearchForm register={register} id={'keyword'} />
       <div className="flex gap-4 mt-3 flex-col sm:flex-row">
         <Button
           outline
-          label="카테고리 등록하기"
+          label="category registration"
           icon={BiCategoryAlt}
           onClick={categoryModal.onOpen}
         />
         <Button
           outline
-          label="상품 등록하기"
+          label="product registration"
           icon={SiProducthunt}
           onClick={productAddModal.onOpen}
         />
@@ -98,15 +119,20 @@ const AdminClient: React.FC<AdminClientProps> = ({
           <ProductCard
             key={product.id}
             data={product}
-            actionLabel="수정"
+            actionLabel="Edit"
             onAction={onEdit}
-            secondaryActionLabel="삭제"
+            secondaryActionLabel="Delete"
             secondaryAction={onCancel}
             actionId={product.id}
             disabled={deletingId === product.id}
           />
         ))}
       </div>
+
+      <PaginationButtons
+        disableNextPage={products.length < PRODUCTS_PER_PAGE}
+        route="admin"
+      />
       <ProductEditModal categories={categories} product={selectedProduct} />
     </Container>
   )
