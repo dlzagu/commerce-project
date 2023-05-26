@@ -12,6 +12,7 @@ import ProductCard from '../components/products/ProductCard'
 import ProductFilter from '../components/products/ProductFilter'
 import EmptyState from '../components/EmptyState'
 import PaginationButtons from '../components/PaginationButtons'
+import SearchForm from '../components/search/SearchForm'
 
 interface ProductsSearchClientProps {
   products: SafeProduct[]
@@ -43,14 +44,8 @@ const ProductsSearchClient: React.FC<ProductsSearchClientProps> = ({
 
   const initialCategories = parseQuery('category')
   const initialSizes = parseQuery('sizes')
-  const initialSort =
-    parseQuery('sort').join('').length == 0
-      ? 'new'
-      : parseQuery('sort').join('')
-  const initialkeyword =
-    parseQuery('searchKeyword').join('').length == 0
-      ? ''
-      : parseQuery('searchKeyword').join('')
+  const initialSort = parseQuery('sort').join('') || ''
+  const initialkeyword = parseQuery('searchKeyword').join('') || ''
 
   const { register, watch, setValue } = useForm({
     defaultValues: {
@@ -105,13 +100,11 @@ const ProductsSearchClient: React.FC<ProductsSearchClientProps> = ({
       category: watchCategory,
       sizes: watchSizes,
       searchKeyword: watchKeyword,
-      page: 1,
     }
     if (watchSort !== '') {
       updatedQuery = {
         ...updatedQuery,
         sort: watchSort,
-        page: 1,
       }
     }
     setActiveFilters([...watchCategory, ...watchSizes])
@@ -129,6 +122,7 @@ const ProductsSearchClient: React.FC<ProductsSearchClientProps> = ({
 
   return (
     <Container>
+      <SearchForm register={register} id={'keyword'} />
       <ProductFilter
         watchSort={watchSort}
         watchSizes={watchSizes}
@@ -140,7 +134,6 @@ const ProductsSearchClient: React.FC<ProductsSearchClientProps> = ({
         register={register}
         open={open}
         setOpen={setOpen}
-        isSearch={true}
       />
       {products?.length == 0 && (
         <EmptyState
@@ -156,6 +149,7 @@ const ProductsSearchClient: React.FC<ProductsSearchClientProps> = ({
       </div>
       <PaginationButtons
         disableNextPage={products.length < PRODUCTS_PER_PAGE}
+        route="searchProducts"
       />
     </Container>
   )

@@ -42,8 +42,7 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
 
   const initialCategories = parseQuery('category')
   const initialSizes = parseQuery('sizes')
-  const initialSort =
-    parseQuery('sort').join('').length == 0 ? '' : parseQuery('sort').join('')
+  const initialSort = parseQuery('sort').join('') || ''
 
   const { register, watch, setValue } = useForm({
     defaultValues: {
@@ -92,26 +91,18 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
   }
 
   useEffect(() => {
-    let currentQuery = {}
-
-    if (params) {
-      currentQuery = qs.parse(params.toString())
-    }
-
     let updatedQuery: any = {
-      ...currentQuery,
       category: watchCategory,
       sizes: watchSizes,
-      page: 1,
     }
 
     if (watchSort !== '') {
       updatedQuery = {
         ...updatedQuery,
         sort: watchSort,
-        page: 1,
       }
     }
+
     setActiveFilters([...watchCategory, ...watchSizes])
 
     const url = qs.stringifyUrl(
@@ -146,6 +137,7 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
       </div>
       <PaginationButtons
         disableNextPage={products.length < PRODUCTS_PER_PAGE}
+        route="products"
       />
     </Container>
   )
