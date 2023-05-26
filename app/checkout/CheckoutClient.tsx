@@ -1,5 +1,5 @@
 'use client'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import useCartItem from '../hooks/useCartItem'
 import { SafeUser } from '@/app/types'
 import useLoginModal from '../hooks/useLoginModal'
@@ -60,7 +60,7 @@ const CheckoutClient: React.FC<CheckoutClientProps> = ({ currentUser }) => {
       .post('/api/order', data)
       .then((res) => {
         let { id } = res.data
-        toast.success('주문 완료')
+        toast.success('Complete payment')
         router.push(`/orders/${id}`)
         removeAllItem()
         reset()
@@ -72,6 +72,10 @@ const CheckoutClient: React.FC<CheckoutClientProps> = ({ currentUser }) => {
         setIsLoading(false)
       })
   }
+
+  useEffect(() => {
+    if (!currentUser) return loginModal.onOpen()
+  }, [currentUser])
 
   return (
     <Container>

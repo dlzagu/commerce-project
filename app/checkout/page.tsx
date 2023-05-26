@@ -6,9 +6,6 @@ import CheckoutClient from './CheckoutClient'
 const CheckoutPage = async () => {
   const currentUser = await getCurrentUser()
 
-  if (!currentUser) {
-    return <EmptyState title="Unauthorized" subtitle="Please login" />
-  }
   return (
     <ClientOnly>
       <CheckoutClient currentUser={currentUser} />

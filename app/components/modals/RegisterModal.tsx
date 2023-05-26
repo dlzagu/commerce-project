@@ -59,8 +59,8 @@ const RegisterModal = () => {
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <Heading
-        title="Welcome !"
-        subtitle="Email로 간편하게 계정을 만들어보세요 !"
+        title="Welcome!"
+        subtitle="Email로 간편하게 계정을 만들어보세요!"
       />
       <Input
         id="email"

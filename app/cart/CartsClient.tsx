@@ -6,7 +6,6 @@ import useCartItem from '../hooks/useCartItem'
 import EmptyState from '../components/EmptyState'
 import { toast } from 'react-hot-toast'
 import { useMemo } from 'react'
-import { useRouter } from 'next/navigation'
 import CartOrderSummary from '../components/cart/CartOderSummary'
 import CartItemCard from '../components/cart/CartItemCard'
 
@@ -15,7 +14,6 @@ interface CartsClientProps {
 }
 
 const CartsClient: React.FC<CartsClientProps> = ({ currentUser }) => {
-  const router = useRouter()
   const { cartItems, removeItem } = useCartItem()
 
   const totalPrice = useMemo(
@@ -25,7 +23,7 @@ const CartsClient: React.FC<CartsClientProps> = ({ currentUser }) => {
 
   const handleRemoveToCart = (idx: number) => {
     removeItem(idx)
-    toast.success('삭제 완료')
+    toast.success('Deleted')
   }
 
   return (

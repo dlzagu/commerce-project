@@ -69,7 +69,12 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
           <div className="flex flex-col cursor-pointer">
             {currentUser ? (
               <>
-                <MenuItem label="Admin" onClick={() => router.push('/admin')} />
+                {currentUser.userType == 'Admin' && (
+                  <MenuItem
+                    label="Admin"
+                    onClick={() => router.push('/admin')}
+                  />
+                )}
                 <MenuItem
                   label="Store"
                   onClick={() => router.push('/products')}
@@ -88,6 +93,10 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
               </>
             ) : (
               <>
+                <MenuItem
+                  label="Store"
+                  onClick={() => router.push('/products')}
+                />
                 <MenuItem label="Login" onClick={loginModal.onOpen} />
                 <MenuItem label="Sign up" onClick={registerModal.onOpen} />
               </>

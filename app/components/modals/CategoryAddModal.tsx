@@ -65,7 +65,7 @@ const CategoryModal: React.FC<CategoriesClientProps> = ({ categories }) => {
     axios
       .post('/api/categories', data)
       .then(() => {
-        toast.success('카테고리 생성완료')
+        toast.success('Category creation complete')
         router.refresh()
         reset()
         categoryModal.onClose()
@@ -85,7 +85,7 @@ const CategoryModal: React.FC<CategoriesClientProps> = ({ categories }) => {
       axios
         .delete(`/api/categories/${id}`)
         .then(() => {
-          toast.success('카테고리 삭제')
+          toast.success('Product deletion complete')
           router.refresh()
         })
         .catch((error) => {

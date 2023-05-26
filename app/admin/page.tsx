@@ -13,10 +13,13 @@ const AdminPage = async ({ searchParams }: IParams) => {
   const currentUser = await getCurrentUser()
   const products = await getProducts(searchParams)
   const categories = await getCategories()
-  if (products.length === 0) {
+  if (currentUser?.userType !== 'Admin') {
     return (
       <ClientOnly>
-        <EmptyState title="상품이 없습니다" subtitle="상품을 등록해주세요." />
+        <EmptyState
+          title="관리자가 아닙니다."
+          subtitle="관리자 등록을 해주세요."
+        />
       </ClientOnly>
     )
   }

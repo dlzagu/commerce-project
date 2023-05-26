@@ -113,7 +113,7 @@ const ProductEditModal: React.FC<ProductEditClientProps> = ({
     axios
       .put(`/api/products/${product?.id}`, data)
       .then(() => {
-        toast.success('상품 수정 완료')
+        toast.success('Product edit complete')
         router.refresh()
         reset()
         setStep(STEPS.CATEGORY)

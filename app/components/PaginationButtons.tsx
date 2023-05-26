@@ -6,8 +6,12 @@ import { IoArrowBackOutline, IoArrowForwardOutline } from 'react-icons/io5'
 
 interface PaginationButtonsProps {
   disableNextPage?: boolean
+  route: string
 }
-const PaginationButtons = ({ disableNextPage }: PaginationButtonsProps) => {
+const PaginationButtons = ({
+  disableNextPage,
+  route,
+}: PaginationButtonsProps) => {
   const router = useRouter()
   const params = useSearchParams()
 
@@ -22,9 +26,9 @@ const PaginationButtons = ({ disableNextPage }: PaginationButtonsProps) => {
     let currentQuery = {}
 
     if (params) {
-      console.log()
       currentQuery = qs.parse(params.toString())
     }
+
     const updatedQuery: any = {
       ...currentQuery,
       page: currentPage + 1,
@@ -32,7 +36,7 @@ const PaginationButtons = ({ disableNextPage }: PaginationButtonsProps) => {
 
     const url = qs.stringifyUrl(
       {
-        url: '/products',
+        url: route,
         query: updatedQuery,
       },
       { skipNull: true }
@@ -72,7 +76,11 @@ const PaginationButtons = ({ disableNextPage }: PaginationButtonsProps) => {
         className="p-3"
         disabled={currentPage === 1}
       >
-        <IoArrowBackOutline className="text-xl" />
+        <IoArrowBackOutline
+          className={`text-xl ${
+            currentPage === 1 ? 'text-gray-400' : 'text-stone-950'
+          } `}
+        />
       </button>
       <p className="mx-4 text-[16px]">Page {currentPage}</p>
       <button
@@ -81,7 +89,11 @@ const PaginationButtons = ({ disableNextPage }: PaginationButtonsProps) => {
         className="p-3"
         disabled={disableNextPage}
       >
-        <IoArrowForwardOutline className="text-xl" />
+        <IoArrowForwardOutline
+          className={`text-xl ${
+            disableNextPage ? 'text-gray-400' : 'text-stone-950'
+          } `}
+        />
       </button>
     </div>
   )

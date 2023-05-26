@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import { SafeProduct, SafeUser } from '@/app/types'
 
 import Button from '../Button'

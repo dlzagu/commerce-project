@@ -14,7 +14,6 @@ import useLoginModal from '@/app/hooks/useLoginModal'
 
 import Modal from '../Modal'
 import Input from '../inputs/Input'
-import Heading from '../Heading'
 import Button from '../Button'
 
 const LoginModal = () => {
@@ -62,7 +61,6 @@ const LoginModal = () => {
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
-      <Heading title="Welcome !" subtitle="귀하의 계정에 로그인하십시오 !" />
       <Input
         id="email"
         label="Email"
