@@ -34,7 +34,6 @@ const useCartItem = create<CartStore>(
     }),
     {
       name: 'cart-storage', // 로컬 저장소 키 설정
-      getStorage: () => localStorage, // 로컬 저장소 사용
     }
   )
 )

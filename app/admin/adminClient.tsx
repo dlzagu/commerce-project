@@ -72,8 +72,12 @@ const AdminClient: React.FC<AdminClientProps> = ({ products, categories }) => {
   )
 
   useEffect(() => {
-    let updatedQuery: any = {
-      searchKeyword: watchKeyword,
+    let updatedQuery: any = {}
+
+    if (watchKeyword !== '') {
+      updatedQuery = {
+        searchKeyword: watchKeyword,
+      }
     }
 
     const url = qs.stringifyUrl({

@@ -40,26 +40,21 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
     } else return []
   }
 
-  const initialCategories = parseQuery('category')
-  const initialSizes = parseQuery('sizes')
-  const initialSort = parseQuery('sort').join('') || ''
-
   const { register, watch, setValue } = useForm({
     defaultValues: {
-      category: initialCategories || [],
-      sizes: initialSizes || [],
-      sort: initialSort,
+      category: [] as (string | null)[],
+      sizes: [] as (string | null)[],
+      sort: '',
+      page: '',
     },
   })
 
   const watchCategory = watch('category')
   const watchSizes = watch('sizes')
   const watchSort = watch('sort')
+  const watchPage = watch('page')
 
-  const [activeFilters, setActiveFilters] = useState([
-    ...parseQuery('category'),
-    ...parseQuery('sizes'),
-  ])
+  const [activeFilters, setActiveFilters] = useState<(string | null)[]>([])
 
   const filters = [
     {
@@ -91,6 +86,13 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
   }
 
   useEffect(() => {
+    setValue('category', parseQuery('category'))
+    setValue('sizes', parseQuery('sizes'))
+    setValue('sort', parseQuery('sort').join('') || '')
+    setValue('page', parseQuery('page').join('') || '')
+  }, [params])
+
+  useEffect(() => {
     let updatedQuery: any = {
       category: watchCategory,
       sizes: watchSizes,
@@ -100,6 +102,12 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
       updatedQuery = {
         ...updatedQuery,
         sort: watchSort,
+      }
+    }
+    if (watchPage !== '') {
+      updatedQuery = {
+        ...updatedQuery,
+        page: watchPage,
       }
     }
 
