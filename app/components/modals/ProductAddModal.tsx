@@ -98,7 +98,7 @@ const ProductAddModal: React.FC<ProductAddClientProps> = ({ categories }) => {
     axios
       .post('/api/products', data)
       .then(() => {
-        toast.success('상품 등록 완료')
+        toast.success('Product creation complete')
         router.refresh()
         reset()
         setStep(STEPS.CATEGORY)
