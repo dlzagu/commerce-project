@@ -1,0 +1,115 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+
+// Product
+model Product {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  name        String      @unique
+  images      String[]
+  description String?
+  sizes       String[]   @default(["XXS","XS","S","M","L","XL","XXL"])
+  quantity    Int
+  price       Int
+  categoryId  String      @db.ObjectId
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime?
+  deleted     Boolean     @default(false) // soft delete
+
+  category Category @relation(fields: [categoryId], references: [id])
+  orderItems  OrderItem[]
+}
+
+model Category {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String    @unique
+  image       String
+  description String
+  products    Product[]
+}
+
+
+model OrderItem {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  productId String  @db.ObjectId
+  orderId   String  @db.ObjectId
+  price     Int
+  name      String
+  size      String
+  image     String
+
+
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}
+
+model Order {
+  id                        String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId                    String      @db.ObjectId
+  orderItems                OrderItem[]
+  name         String?
+  address      String?
+  city         String?
+  state        String?
+  postalCode   String?
+  phoneNumber  String?
+  createdAt                 DateTime    @default(now())
+  updatedAt                 DateTime?
+
+  user                      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Next-Auth
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?  @db.String
+  access_token      String?  @db.String
+  expires_at        Int?
+  refresh_token_expires_in Int?
+  token_type        String?
+  scope             String?
+  id_token          String?  @db.String
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+
+
+enum UserType {
+  User
+  Admin
+}
+
+model User {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  hashedPassword  String?
+  favoriteIds     String[] @db.ObjectId
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  accounts      Account[]
+  orders        Order[]
+  userType      UserType  @default(User)
+}
+
