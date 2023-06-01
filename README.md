@@ -25,7 +25,7 @@
 
 </br>
 
-### **창업했던 아이템을 활용한 쇼핑몰 프로젝트**
+### **대학교 창업동아리를 통해 브랜딩 했던 주얼리 쇼핑몰 프로젝트**
 
 - 대학교 시절 창업동아리를 통해 주얼리 브랜드를 운영한 경험이 있는데, 나만의 디자인으로 새롭게 웹사이트를 제작해보았습니다.
 - NextJs를 사용하여 서버를 간편하게 구축했고, Vercel의 서버리스 장점을 살려 쉽게 배포하여 관리하고 있습니다.
@@ -47,7 +47,7 @@
 
 <img src="https://img.shields.io/badge/Axios-5A29E4?style=flat-square&logo=Axios&logoColor=white"/>
 <img src="https://img.shields.io/badge/Zustand-FAB040?style=flat-square&logo=Zustand&logoColor=white"/>
-<img src="https://img.shields.io/badge/React Hook Form-EC5990?style=flat-square&logo=React Hook Form&logoColor=white"/>
+<img src="https://img.shields.io/badge/ReactHookForm-EC5990?style=flat-square&logo=ReactHookForm&logoColor=white"/>
 <br />
 
 <img src="https://img.shields.io/badge/Prisma-2D3748?style=flat-square&logo=prisma&logoColor=white"/>
