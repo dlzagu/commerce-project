@@ -95,6 +95,14 @@ const ProductsSearchClient: React.FC<ProductsSearchClientProps> = ({
     }
   }
 
+  const handleToggle = () => {
+    setOpen(!open)
+  }
+
+  const handleUpdateSort = (value: string) => {
+    setValue('sort', value)
+  }
+
   useEffect(() => {
     let updatedQuery: any = {
       category: watchCategory,
@@ -130,10 +138,10 @@ const ProductsSearchClient: React.FC<ProductsSearchClientProps> = ({
         activeFilters={activeFilters}
         filters={filters}
         removeFilter={removeFilter}
-        setValue={setValue}
+        handleUpdateSort={handleUpdateSort}
         register={register}
         open={open}
-        setOpen={setOpen}
+        handleToggle={handleToggle}
       />
       {products?.length == 0 && (
         <EmptyState

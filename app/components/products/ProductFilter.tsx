@@ -10,7 +10,7 @@ import {
 } from '@headlessui/react'
 import { HiX, HiChevronDown } from 'react-icons/hi'
 import { SORT_OPTIONS } from '@/app/constants'
-import { UseFormRegister, UseFormSetValue } from 'react-hook-form'
+import { UseFormRegister } from 'react-hook-form'
 
 interface ProductFilterProps {
   watchSort: string
@@ -19,10 +19,10 @@ interface ProductFilterProps {
   activeFilters: (string | null)[]
   filters: { id: string; name: string; options: string[] }[]
   removeFilter: (value: string) => void
-  setValue: UseFormSetValue<any>
   register: UseFormRegister<any>
   open: boolean
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  handleToggle: () => void
+  handleUpdateSort: (value: string) => void
 }
 
 function classNames(...classes: any) {
@@ -36,8 +36,8 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
   activeFilters,
   open,
   filters,
-  setOpen,
-  setValue,
+  handleToggle,
+  handleUpdateSort,
   register,
   removeFilter,
 }) => {
@@ -48,7 +48,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
         <Dialog
           as="div"
           className="fixed inset-0 flex z-40 sm:hidden"
-          onClose={setOpen}
+          onClose={handleToggle}
         >
           <Transition.Child
             as={Fragment}
@@ -77,7 +77,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
                 <button
                   type="button"
                   className="-mr-2 w-10 h-10 bg-white p-2 rounded-md flex items-center justify-center text-gray-400"
-                  onClick={() => setOpen(false)}
+                  onClick={() => handleToggle()}
                 >
                   <span className="sr-only">Close menu</span>
                   <HiX className="h-6 w-6" aria-hidden="true" />
@@ -185,7 +185,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
                         {({ active }) => (
                           <div
                             onClick={() => {
-                              setValue('sort', option.id) // 클릭 이벤트에서 setValue를 사용하여 sort 상태 업데이트
+                              handleUpdateSort(option.id)
                             }}
                             className={classNames(
                               watchSort == option.id
@@ -208,7 +208,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
             <button
               type="button"
               className="inline-block text-sm font-medium text-gray-700 hover:text-gray-900 sm:hidden"
-              onClick={() => setOpen(true)}
+              onClick={() => handleToggle()}
             >
               Filters
             </button>

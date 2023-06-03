@@ -85,6 +85,14 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
     }
   }
 
+  const handleToggle = () => {
+    setOpen(!open)
+  }
+
+  const handleUpdateSort = (value: string) => {
+    setValue('sort', value)
+  }
+
   useEffect(() => {
     setValue('category', parseQuery('category'))
     setValue('sizes', parseQuery('sizes'))
@@ -133,10 +141,10 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
         activeFilters={activeFilters}
         filters={filters}
         removeFilter={removeFilter}
-        setValue={setValue}
+        handleUpdateSort={handleUpdateSort}
         register={register}
         open={open}
-        setOpen={setOpen}
+        handleToggle={handleToggle}
       />
       <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 md:gap-y-0 lg:gap-x-8">
         {products?.map((product) => (
