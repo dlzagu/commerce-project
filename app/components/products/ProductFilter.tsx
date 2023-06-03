@@ -21,7 +21,7 @@ interface ProductFilterProps {
   removeFilter: (value: string) => void
   register: UseFormRegister<any>
   open: boolean
-  handleToggle: () => void
+  onToggle: () => void
   handleUpdateSort: (value: string) => void
 }
 
@@ -36,7 +36,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
   activeFilters,
   open,
   filters,
-  handleToggle,
+  onToggle,
   handleUpdateSort,
   register,
   removeFilter,
@@ -48,7 +48,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
         <Dialog
           as="div"
           className="fixed inset-0 flex z-40 sm:hidden"
-          onClose={handleToggle}
+          onClose={onToggle}
         >
           <Transition.Child
             as={Fragment}
@@ -77,7 +77,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
                 <button
                   type="button"
                   className="-mr-2 w-10 h-10 bg-white p-2 rounded-md flex items-center justify-center text-gray-400"
-                  onClick={() => handleToggle()}
+                  onClick={() => onToggle()}
                 >
                   <span className="sr-only">Close menu</span>
                   <HiX className="h-6 w-6" aria-hidden="true" />
@@ -208,7 +208,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
             <button
               type="button"
               className="inline-block text-sm font-medium text-gray-700 hover:text-gray-900 sm:hidden"
-              onClick={() => handleToggle()}
+              onClick={() => onToggle()}
             >
               Filters
             </button>

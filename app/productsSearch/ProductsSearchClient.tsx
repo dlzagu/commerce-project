@@ -95,8 +95,8 @@ const ProductsSearchClient: React.FC<ProductsSearchClientProps> = ({
     }
   }
 
-  const handleToggle = () => {
-    setOpen(!open)
+  const onToggle = () => {
+    setOpen((value) => !value)
   }
 
   const handleUpdateSort = (value: string) => {
@@ -141,7 +141,7 @@ const ProductsSearchClient: React.FC<ProductsSearchClientProps> = ({
         handleUpdateSort={handleUpdateSort}
         register={register}
         open={open}
-        handleToggle={handleToggle}
+        onToggle={onToggle}
       />
       {products?.length == 0 && (
         <EmptyState

@@ -45,6 +45,10 @@ const ProductClient: React.FC<ProductClientProps> = ({
     }, 200)
   }
 
+  const onClose = () => {
+    setIsOpen(false)
+  }
+
   return (
     <Container>
       <div className="p-4 mx-auto max-w-2xl sm:px-6 lg:px-8 lg:max-w-7xl">
@@ -62,7 +66,7 @@ const ProductClient: React.FC<ProductClientProps> = ({
           />
         </div>
       </div>
-      <SizeGuideModal isOpen={isOpne} setIsOpen={setIsOpen} />
+      <SizeGuideModal isOpen={isOpne} onClose={onClose} />
     </Container>
   )
 }
