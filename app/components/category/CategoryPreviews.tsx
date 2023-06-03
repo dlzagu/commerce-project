@@ -34,7 +34,7 @@ const CategoryPreviews: React.FC<CategoryPeviewsProps> = ({ categories }) => {
           </h2>
           <div
             onClick={() => router.push('/products')}
-            className="hidden text-sm font-semibold text-indigo-600 hover:text-indigo-500  sm:block"
+            className="hidden text-sm font-semibold text-indigo-600 hover:text-indigo-500  sm:block cursor-pointer"
           >
             all products<span aria-hidden="true"> &rarr;</span>
           </div>
@@ -132,7 +132,7 @@ const CategoryPreviews: React.FC<CategoryPeviewsProps> = ({ categories }) => {
         <div className="mt-6 sm:hidden">
           <div
             onClick={() => router.push('/products')}
-            className="block text-sm font-semibold text-indigo-600 hover:text-indigo-500"
+            className="block text-sm font-semibold text-indigo-600 hover:text-indigo-500 cursor-pointer"
           >
             all products<span aria-hidden="true"> &rarr;</span>
           </div>

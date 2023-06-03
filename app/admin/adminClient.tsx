@@ -94,13 +94,13 @@ const AdminClient: React.FC<AdminClientProps> = ({ products, categories }) => {
       <div className="flex gap-4 mt-3 flex-col sm:flex-row">
         <Button
           outline
-          label="category registration"
+          label="create category"
           icon={BiCategoryAlt}
           onClick={categoryModal.onOpen}
         />
         <Button
           outline
-          label="product registration"
+          label="create product"
           icon={SiProducthunt}
           onClick={productAddModal.onOpen}
         />

@@ -5,16 +5,9 @@ import Image from 'next/image'
 
 interface SizeGuideModalProps {
   isOpen: boolean
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+  onClose: () => void
 }
-const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
-  isOpen,
-  setIsOpen,
-}) => {
-  const onClose = () => {
-    setIsOpen(false)
-  }
-
+const SizeGuideModal: React.FC<SizeGuideModalProps> = ({ isOpen, onClose }) => {
   const bodyContent = (
     <>
       <Image
