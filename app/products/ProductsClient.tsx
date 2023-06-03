@@ -98,7 +98,7 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
     setValue('sizes', parseQuery('sizes'))
     setValue('sort', parseQuery('sort').join('') || '')
     setValue('page', parseQuery('page').join('') || '')
-  }, [params])
+  }, [])
 
   useEffect(() => {
     let updatedQuery: any = {
