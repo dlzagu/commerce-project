@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useSearchParams, useRouter } from 'next/navigation'
 import qs from 'query-string'
@@ -69,22 +69,6 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
     },
   ]
 
-  const removeFilter = (value: string) => {
-    let updatedActiveFilters = [...activeFilters].filter(
-      (filter) => filter != value
-    )
-    setActiveFilters(updatedActiveFilters)
-    if (watchCategory.includes(value)) {
-      let updatedCategory = [...watchCategory].filter(
-        (category) => category != value
-      )
-      setValue('category', updatedCategory)
-    } else {
-      let updatedSizes = [...watchSizes].filter((size) => size != value)
-      setValue('sizes', updatedSizes)
-    }
-  }
-
   const onToggle = () => {
     setOpen((value) => !value)
   }
@@ -92,15 +76,7 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
   const handleUpdateSort = (value: string) => {
     setValue('sort', value)
   }
-
-  useEffect(() => {
-    setValue('category', parseQuery('category'))
-    setValue('sizes', parseQuery('sizes'))
-    setValue('sort', parseQuery('sort').join('') || '')
-    setValue('page', parseQuery('page').join('') || '')
-  }, [])
-
-  useEffect(() => {
+  const onClickFilter = useCallback(() => {
     let updatedQuery: any = {
       category: watchCategory,
       sizes: watchSizes,
@@ -115,11 +91,9 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
     if (watchPage !== '') {
       updatedQuery = {
         ...updatedQuery,
-        page: watchPage,
+        page: 1,
       }
     }
-
-    setActiveFilters([...watchCategory, ...watchSizes])
 
     const url = qs.stringifyUrl(
       {
@@ -130,6 +104,30 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
     )
 
     router.push(url)
+  }, [watchCategory, watchSizes, watchSort, router])
+
+  const removeFilter = (value: string) => {
+    if (watchCategory.includes(value)) {
+      let updatedCategory = [...watchCategory].filter(
+        (category) => category != value
+      )
+      setValue('category', updatedCategory)
+    } else {
+      let updatedSizes = [...watchSizes].filter((size) => size != value)
+      setValue('sizes', updatedSizes)
+    }
+  }
+
+  useEffect(() => {
+    setValue('category', parseQuery('category'))
+    setValue('sizes', parseQuery('sizes'))
+    setValue('sort', parseQuery('sort').join('') || '')
+    setValue('page', parseQuery('page').join('') || '')
+  }, [])
+
+  useEffect(() => {
+    setActiveFilters([...watchCategory, ...watchSizes])
+    onClickFilter()
   }, [watchCategory, watchSizes, watchSort])
 
   return (
@@ -152,8 +150,8 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
         ))}
       </div>
       <PaginationButtons
-        disableNextPage={products.length < PRODUCTS_PER_PAGE}
         route="products"
+        disableNextPage={products.length < PRODUCTS_PER_PAGE}
       />
     </Container>
   )
