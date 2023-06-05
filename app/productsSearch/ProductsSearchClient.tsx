@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useSearchParams, useRouter } from 'next/navigation'
 import qs from 'query-string'
@@ -42,29 +42,23 @@ const ProductsSearchClient: React.FC<ProductsSearchClientProps> = ({
     } else return []
   }
 
-  const initialCategories = parseQuery('category')
-  const initialSizes = parseQuery('sizes')
-  const initialSort = parseQuery('sort').join('') || ''
-  const initialkeyword = parseQuery('searchKeyword').join('') || ''
-
   const { register, watch, setValue } = useForm({
     defaultValues: {
-      category: initialCategories || [],
-      sizes: initialSizes || [],
-      sort: initialSort,
-      keyword: initialkeyword,
+      category: [] as (string | null)[],
+      sizes: [] as (string | null)[],
+      sort: '',
+      page: '',
+      keyword: '',
     },
   })
 
   const watchCategory = watch('category')
   const watchSizes = watch('sizes')
   const watchSort = watch('sort')
+  const watchPage = watch('page')
   const watchKeyword = watch('keyword')
 
-  const [activeFilters, setActiveFilters] = useState([
-    ...parseQuery('category'),
-    ...parseQuery('sizes'),
-  ])
+  const [activeFilters, setActiveFilters] = useState<(string | null)[]>([])
 
   const filters = [
     {
@@ -79,11 +73,50 @@ const ProductsSearchClient: React.FC<ProductsSearchClientProps> = ({
     },
   ]
 
-  const removeFilter = (value: string) => {
-    let updatedActiveFilters = [...activeFilters].filter(
-      (filter) => filter != value
+  const onToggle = () => {
+    setOpen((value) => !value)
+  }
+
+  const handleUpdateSort = (value: string) => {
+    setValue('sort', value)
+  }
+  const onClickFilter = useCallback(() => {
+    let updatedQuery: any = {
+      category: watchCategory,
+      sizes: watchSizes,
+    }
+
+    if (watchSort !== '') {
+      updatedQuery = {
+        ...updatedQuery,
+        sort: watchSort,
+      }
+    }
+    if (watchPage !== '') {
+      updatedQuery = {
+        ...updatedQuery,
+        page: 1,
+      }
+    }
+    if (watchKeyword !== '') {
+      updatedQuery = {
+        ...updatedQuery,
+        searchKeyword: watchKeyword,
+      }
+    }
+
+    const url = qs.stringifyUrl(
+      {
+        url: '/productsSearch/',
+        query: updatedQuery,
+      },
+      { skipNull: true, arrayFormat: 'comma' }
     )
-    setActiveFilters(updatedActiveFilters)
+
+    router.push(url)
+  }, [watchCategory, watchSizes, watchSort, watchKeyword, router])
+
+  const removeFilter = (value: string) => {
     if (watchCategory.includes(value)) {
       let updatedCategory = [...watchCategory].filter(
         (category) => category != value
@@ -95,37 +128,17 @@ const ProductsSearchClient: React.FC<ProductsSearchClientProps> = ({
     }
   }
 
-  const onToggle = () => {
-    setOpen((value) => !value)
-  }
-
-  const handleUpdateSort = (value: string) => {
-    setValue('sort', value)
-  }
+  useEffect(() => {
+    setValue('category', parseQuery('category'))
+    setValue('sizes', parseQuery('sizes'))
+    setValue('sort', parseQuery('sort').join('') || '')
+    setValue('page', parseQuery('page').join('') || '')
+    setValue('keyword', parseQuery('searchKeyword').join('') || '')
+  }, [])
 
   useEffect(() => {
-    let updatedQuery: any = {
-      category: watchCategory,
-      sizes: watchSizes,
-      searchKeyword: watchKeyword,
-    }
-    if (watchSort !== '') {
-      updatedQuery = {
-        ...updatedQuery,
-        sort: watchSort,
-      }
-    }
     setActiveFilters([...watchCategory, ...watchSizes])
-
-    const url = qs.stringifyUrl(
-      {
-        url: '/productsSearch/',
-        query: updatedQuery,
-      },
-      { skipNull: true, arrayFormat: 'comma' }
-    )
-
-    router.push(url)
+    onClickFilter()
   }, [watchCategory, watchSizes, watchSort, watchKeyword])
 
   return (
@@ -157,7 +170,7 @@ const ProductsSearchClient: React.FC<ProductsSearchClientProps> = ({
       </div>
       <PaginationButtons
         disableNextPage={products.length < PRODUCTS_PER_PAGE}
-        route="searchProducts"
+        route="productsSearch"
       />
     </Container>
   )

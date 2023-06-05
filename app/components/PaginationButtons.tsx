@@ -59,7 +59,7 @@ const PaginationButtons = ({
 
     const url = qs.stringifyUrl(
       {
-        url: '/products',
+        url: route,
         query: updatedQuery,
       },
       { skipNull: true }

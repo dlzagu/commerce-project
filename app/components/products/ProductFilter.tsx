@@ -1,13 +1,7 @@
 'use client'
 
 import { Fragment } from 'react'
-import {
-  Dialog,
-  Disclosure,
-  Menu,
-  Popover,
-  Transition,
-} from '@headlessui/react'
+import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { HiX, HiChevronDown } from 'react-icons/hi'
 import { SORT_OPTIONS } from '@/app/constants'
 import { UseFormRegister } from 'react-hook-form'
@@ -47,7 +41,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
       <Transition.Root show={open} as={Fragment}>
         <Dialog
           as="div"
-          className="fixed inset-0 flex z-40 sm:hidden"
+          className="fixed inset-0 flex z-40 "
           onClose={onToggle}
         >
           <Transition.Child
@@ -207,77 +201,11 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
 
             <button
               type="button"
-              className="inline-block text-sm font-medium text-gray-700 hover:text-gray-900 sm:hidden"
+              className="inline-block text-sm font-medium text-gray-700 hover:text-gray-900 "
               onClick={() => onToggle()}
             >
               Filters
             </button>
-
-            <div className="hidden sm:block">
-              <div className="flow-root">
-                <Popover.Group className="-mx-4 flex items-center divide-x divide-gray-200">
-                  {filters.map((section, sectionIdx) => (
-                    <Popover
-                      key={section.name}
-                      className="px-4 relative inline-block text-left"
-                    >
-                      <Popover.Button className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
-                        <span>{section.name}</span>
-                        {sectionIdx === 0 ? (
-                          <span className="ml-1.5 rounded py-0.5 px-1.5 bg-gray-200 text-xs font-semibold text-gray-700 tabular-nums">
-                            {watchCategory.length}
-                          </span>
-                        ) : null}
-                        <HiChevronDown
-                          className="flex-shrink-0 -mr-1 ml-1 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                          aria-hidden="true"
-                        />
-                      </Popover.Button>
-
-                      <Transition
-                        as={Fragment}
-                        enter="transition ease-out duration-100"
-                        enterFrom="transform opacity-0 scale-95"
-                        enterTo="transform opacity-100 scale-100"
-                        leave="transition ease-in duration-75"
-                        leaveFrom="transform opacity-100 scale-100"
-                        leaveTo="transform opacity-0 scale-95"
-                      >
-                        <Popover.Panel className="origin-top-right absolute right-0 mt-2 bg-white rounded-md shadow-2xl p-4 ring-1 ring-black ring-opacity-5 focus:outline-none">
-                          <form className="space-y-4">
-                            {section.options.map((value) => {
-                              const optionValue = value
-                              let isChecked = false
-
-                              if (section.id === 'category') {
-                                isChecked = watchCategory.includes(optionValue)
-                              } else if (section.id === 'sizes') {
-                                isChecked = watchSizes.includes(optionValue)
-                              }
-                              return (
-                                <div key={value} className="flex items-center">
-                                  <input
-                                    {...register(`${section.id}` as any)}
-                                    id={section.id}
-                                    value={value}
-                                    type="checkbox"
-                                    checked={isChecked}
-                                    className="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
-                                  />
-                                  <label className="ml-3 pr-6 text-sm font-medium text-gray-900 whitespace-nowrap">
-                                    {value}
-                                  </label>
-                                </div>
-                              )
-                            })}
-                          </form>
-                        </Popover.Panel>
-                      </Transition>
-                    </Popover>
-                  ))}
-                </Popover.Group>
-              </div>
-            </div>
           </div>
         </div>
 
