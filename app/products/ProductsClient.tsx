@@ -1,9 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useSearchParams, useRouter } from 'next/navigation'
-import qs from 'query-string'
+import { useState } from 'react'
 import Container from '@/app/components/Container'
 import { SafeProduct } from '@/app/types'
 import { Category } from '@prisma/client'
@@ -11,6 +8,7 @@ import { DEFAULT_SIZES, PRODUCTS_PER_PAGE } from '../constants'
 import ProductCard from '../components/products/ProductCard'
 import ProductFilter from '../components/products/ProductFilter'
 import PaginationButtons from '../components/PaginationButtons'
+import useProductFilter from '../hooks/useProductFilter'
 
 interface ProductsClientProps {
   products: SafeProduct[]
@@ -21,40 +19,10 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
   products,
   categories,
 }) => {
-  const router = useRouter()
-  const params = useSearchParams()
   const categoriesValue = categories.map((category) => category.name)
+  const { register, handleUpdateSort, activeFilters, watch, removeFilter } =
+    useProductFilter()
   const [open, setOpen] = useState(false)
-  const parseQuery = (queryKey: string) => {
-    if (params) {
-      const parsedParams = qs.parse(params.toString(), {
-        arrayFormat: 'comma',
-      })
-
-      const queryValue = parsedParams[queryKey]
-      if (!queryValue) {
-        return []
-      }
-
-      return Array.isArray(queryValue) ? queryValue : [queryValue]
-    } else return []
-  }
-
-  const { register, watch, setValue } = useForm({
-    defaultValues: {
-      category: [] as (string | null)[],
-      sizes: [] as (string | null)[],
-      sort: '',
-      page: '',
-    },
-  })
-
-  const watchCategory = watch('category')
-  const watchSizes = watch('sizes')
-  const watchSort = watch('sort')
-  const watchPage = watch('page')
-
-  const [activeFilters, setActiveFilters] = useState<(string | null)[]>([])
 
   const filters = [
     {
@@ -73,69 +41,12 @@ const ProductsClient: React.FC<ProductsClientProps> = ({
     setOpen((value) => !value)
   }
 
-  const handleUpdateSort = (value: string) => {
-    setValue('sort', value)
-  }
-  const onClickFilter = useCallback(() => {
-    let updatedQuery: any = {
-      category: watchCategory,
-      sizes: watchSizes,
-    }
-
-    if (watchSort !== '') {
-      updatedQuery = {
-        ...updatedQuery,
-        sort: watchSort,
-      }
-    }
-    if (watchPage !== '') {
-      updatedQuery = {
-        ...updatedQuery,
-        page: 1,
-      }
-    }
-
-    const url = qs.stringifyUrl(
-      {
-        url: '/products/',
-        query: updatedQuery,
-      },
-      { skipNull: true, arrayFormat: 'comma' }
-    )
-
-    router.push(url)
-  }, [watchCategory, watchSizes, watchSort, router])
-
-  const removeFilter = (value: string) => {
-    if (watchCategory.includes(value)) {
-      let updatedCategory = [...watchCategory].filter(
-        (category) => category != value
-      )
-      setValue('category', updatedCategory)
-    } else {
-      let updatedSizes = [...watchSizes].filter((size) => size != value)
-      setValue('sizes', updatedSizes)
-    }
-  }
-
-  useEffect(() => {
-    setValue('category', parseQuery('category'))
-    setValue('sizes', parseQuery('sizes'))
-    setValue('sort', parseQuery('sort').join('') || '')
-    setValue('page', parseQuery('page').join('') || '')
-  }, [])
-
-  useEffect(() => {
-    setActiveFilters([...watchCategory, ...watchSizes])
-    onClickFilter()
-  }, [watchCategory, watchSizes, watchSort])
-
   return (
     <Container>
       <ProductFilter
-        watchSort={watchSort}
-        watchSizes={watchSizes}
-        watchCategory={watchCategory}
+        watchSort={watch('sort')}
+        watchSizes={watch('sizes')}
+        watchCategory={watch('category')}
         activeFilters={activeFilters}
         filters={filters}
         removeFilter={removeFilter}
